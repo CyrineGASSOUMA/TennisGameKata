@@ -67,13 +67,7 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.github.springtestdbunit/spring-test-dbunit -->
-		<dependency>
-			<groupId>com.github.springtestdbunit</groupId>
-			<artifactId>spring-test-dbunit</artifactId>
-			<version>1.2.1</version>
-			<scope>test</scope>
-		</dependency>
+
 
 
 	</dependencies>

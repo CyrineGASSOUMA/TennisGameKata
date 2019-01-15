@@ -27,14 +27,18 @@ public class GameModel {
     Long idGame;
 
     @Column(name="name_game")
+    @NonNull
     @ApiModelProperty(value="The name of the game",example = "Game1")
     String nameGame;
 
     @Column(name="state")
+    @NonNull
     @ApiModelProperty(value="The state of the game",example = "FINISHed")
+    @Enumerated(EnumType.STRING)
     GAMESTATE stateGame;
 
-    @OneToMany(mappedBy = "game")
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
     @ApiModelProperty(value="The list of the player in the Game",example = "")
     List<PlayerModel> playerModelList;
 

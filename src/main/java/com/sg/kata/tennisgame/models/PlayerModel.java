@@ -10,8 +10,9 @@ import javax.persistence.*;
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Entity(name= "Player")
@@ -20,30 +21,33 @@ public class PlayerModel {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id_player",insertable = false)
-    @Getter
-    @Setter
     @ApiModelProperty(value="The id of the game in the db- autogeneated value",example = "1")
     Long idPlayer;
 
     @Column(name="name")
+    @NonNull
     @ApiModelProperty(value="The name of the player",example = "Philipe")
     String name;
 
-    @Column(name="The surname of the player")
-    @ApiModelProperty(value="The first player",example = "")
+    @Column(name="surname")
+    @NonNull
+    @ApiModelProperty(value="The surname of the player",example = "")
     String surname;
 
     @Column(name="score")
-    @ApiModelProperty(value="The first player",example = "")
+    @NonNull
+    @ApiModelProperty(value="The actual score of the player",example = "")
     int score;
 
-    @Column(name="winner_of_game")
-    @ApiModelProperty(value="The first player",example = "")
-    Boolean winner;
+    @Column(name="win_a_point")
+    @NonNull
+    @ApiModelProperty(value="The player win a point or not",example = "")
+    Boolean winAPoint;
 
-
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_game")
-    @ApiModelProperty(value="The first player",example = "")
+    @ApiModelProperty(value="The game where the player play",example = "")
     GameModel game;
+
+
 }
