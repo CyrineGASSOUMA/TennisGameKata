@@ -1,9 +1,11 @@
 package com.sg.kata.tennisgame.services;
 
 import com.sg.kata.tennisgame.dto.PlayerDto;
+import com.sg.kata.tennisgame.dto.PlayerOutputDto;
 import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.repositories.IPlayerRepository;
+import com.sg.kata.tennisgame.utils.PlayerMapper;
 import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
 import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
 import lombok.AccessLevel;
@@ -14,8 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.sg.kata.tennisgame.utils.PlayerMapper.PLAYER_MAPPER;
 
 @Service
 @FieldDefaults(level= AccessLevel.PRIVATE)
@@ -72,4 +78,20 @@ public class PlayerService implements IPlayerService {
 
     }
 
+
+    /**
+     * Get the scores of all the players
+     * @return List<PlayerOutputDto>
+     */
+    @Transactional
+    public List<PlayerOutputDto> getPlayersWithScore() {
+        logger.info("Get the name,surname and score of the two players ");
+        List<PlayerOutputDto> playerOutputDtoList = new ArrayList<>();
+       playerRepository.findAll().
+               forEach(item->{
+            playerOutputDtoList.add(PLAYER_MAPPER.playerOutputDtoToPlayer(item));
+        });
+       return playerOutputDtoList;
+
+    }
 }

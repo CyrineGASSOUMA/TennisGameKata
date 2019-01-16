@@ -10,7 +10,6 @@ import javax.persistence.*;
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Data
-//@AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter

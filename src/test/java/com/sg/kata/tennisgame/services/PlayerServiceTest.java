@@ -1,5 +1,6 @@
 package com.sg.kata.tennisgame.services;
 
+import com.sg.kata.tennisgame.dto.PlayerOutputDto;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.repositories.IPlayerRepository;
 import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
@@ -46,6 +47,7 @@ public class PlayerServiceTest {
         playerModelList.add(playerModel);
         when(playerRepository.findPlayerByNameAndSurname(name,surname)).thenReturn(playerModelList);
         when(playerRepository.save(playerModel)).thenReturn(playerModel);
+        when(playerRepository.findAll()).thenReturn(playerModelList);
     }
 
     @Test
@@ -58,6 +60,18 @@ public class PlayerServiceTest {
         assertEquals(playerModelResult.getSurname(),"Raphael");
         assertEquals(playerModelResult.getScore(),0);
         assertEquals(playerModelResult.getWinAPoint(),true);
+    }
+
+    @Test
+    public void getPlayersWithScore(){
+        List<PlayerOutputDto> playerOutputDtoListResult = playerService.getPlayersWithScore();
+        assertNotNull(playerOutputDtoListResult);
+        assertEquals(playerOutputDtoListResult.size(),1);
+        assertEquals(playerOutputDtoListResult.get(0).getName(),"Nadal");
+        assertEquals(playerOutputDtoListResult.get(0).getSurname(),"Raphael");
+        assertEquals(playerOutputDtoListResult.get(0).getScore(),0);
+
+
     }
 
     @Test
