@@ -14,9 +14,9 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class GameDto {
 
-    @ApiParam(value="The first player",example = "")
+    @ApiParam(value="The first player")
     PlayerDto player1;
 
-    @ApiParam(value="The second player",example = "")
+    @ApiParam(value="The second player")
     PlayerDto player2;
 }

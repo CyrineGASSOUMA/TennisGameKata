@@ -67,8 +67,8 @@ public class GameServiceTest {
         playerDto3 = new PlayerDto(namePlayer1,surnamePlayer1,true);
         playerDto4 = new PlayerDto(namePlayer2,surnamePlayer2,false);
 
-        playerModel1 = new PlayerModel("Roger","Federer",15,true);
-        playerModel2 = new PlayerModel("Jimmy","Connors",40,false);
+        playerModel1 = new PlayerModel("Roger","Federer",15,true,false);
+        playerModel2 = new PlayerModel("Jimmy","Connors",40,false,false);
         playerModelList = new ArrayList<>();
         playerModelList.add(playerModel1);
         playerModelList.add(playerModel2);
@@ -78,7 +78,7 @@ public class GameServiceTest {
         secondPlayerList= new ArrayList<>();
         secondPlayerList.add(playerModel2);
 
-        gameModel= new GameModel(1L,"Game 1", GAMESTATE.INPROGRESS,playerModelList);
+        gameModel= new GameModel(1L,"Game 1", GAMESTATE.INPROGRESS,false,playerModelList);
 
 
         when(playerService.saveOrUpdatePlayer(playerModel1)).thenReturn(playerModel1);

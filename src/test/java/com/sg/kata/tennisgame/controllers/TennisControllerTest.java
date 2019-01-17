@@ -59,7 +59,7 @@ public class TennisControllerTest {
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
         gameDto = new GameDto(playerDto1,playerDto2);
         Map<String,Integer> mapResult = new HashMap<>();
-        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,"Roger Federer");
+        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,"Roger Federer",false,"");
         resultDto = new ResultDto<>();
         resultDto.setCode("Succes");
         resultDto.setMessage("Playing");

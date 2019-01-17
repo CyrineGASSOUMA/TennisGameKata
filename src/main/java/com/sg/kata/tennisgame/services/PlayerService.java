@@ -94,4 +94,10 @@ public class PlayerService implements IPlayerService {
        return playerOutputDtoList;
 
     }
+
+    @Transactional
+    public  Boolean playerHasAdvantage(PlayerModel playerModel){
+        return playerRepository.findPlayerByNameAndSurname(playerModel.getName(),playerModel.getSurname()).get(0).getHasAdvantage();
+
+    }
 }

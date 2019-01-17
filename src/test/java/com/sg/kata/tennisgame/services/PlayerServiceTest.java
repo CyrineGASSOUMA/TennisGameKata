@@ -41,7 +41,7 @@ public class PlayerServiceTest {
     public void init(){
         name="Nadal";
         surname = "Raphael";
-        playerModel = new PlayerModel("Nadal","Raphael",0,true);
+        playerModel = new PlayerModel("Nadal","Raphael",0,true,false);
         playerModel.setIdPlayer(1L);
         playerModelList= new ArrayList<>();
         playerModelList.add(playerModel);
@@ -90,5 +90,13 @@ public class PlayerServiceTest {
     public void findPlayerScoreByNameSurnameServiceTest()throws Exception{
         int score = playerService.findPlayerScoreByNameSurnameService(playerModel.getName(),playerModel.getSurname());
         assertEquals(score,0);
+    }
+
+    @Test
+    public void playerHasAdvantageTest(){
+        Boolean playerHasAdvantageResult = playerService.playerHasAdvantage(playerModel);
+        assertNotNull(playerHasAdvantageResult);
+        assertEquals(playerHasAdvantageResult,false);
+
     }
 }

@@ -13,4 +13,6 @@ public interface IPlayerRepository extends CrudRepository<PlayerModel, Long> {
 
     @Query(value="select score from Player where name=?1 and surname=?2",nativeQuery=true)
     int findPlayerScoreByNameSurname(String name, String surname);
+
+
 }

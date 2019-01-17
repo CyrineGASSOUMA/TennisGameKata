@@ -15,4 +15,5 @@ public interface IPlayerService {
 
     public int findPlayerScoreByNameSurnameService(String name, String surname) throws SearchParamsException;
     public List<PlayerOutputDto> getPlayersWithScore() ;
+    public  Boolean playerHasAdvantage(PlayerModel playerModel);
 }

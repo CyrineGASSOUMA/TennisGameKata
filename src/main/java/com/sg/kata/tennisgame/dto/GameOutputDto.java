@@ -18,21 +18,29 @@ import java.util.Map;
 @Getter
 @Setter
 public class GameOutputDto extends GameDto {
-    @ApiModelProperty(value="The couple of player Name-Surname and score of the two players",example = "")
+    @ApiModelProperty(value="The couple of player Name-Surname and score of the two players")
     Map<String, Integer> scorePlayers ;
 
     @ApiModelProperty(value="The state of the game",example = "FINISHed")
     @Enumerated(EnumType.STRING)
     GAMESTATE stateGame;
 
-    @ApiModelProperty(value="The name and the surname of the winAPoint of the game",example = "")
+    @ApiModelProperty(value="The name and the surname of the winAPoint of the game")
     String winnerOfTheGame;
 
+    @ApiModelProperty(value="The Deuce role is activated or not")
+    Boolean deuceRule;
+
+    @ApiModelProperty(value="The player who has the advantage if the deuce rule is activated")
+    String advantagePlayer;
+
     @Builder
-    public GameOutputDto(PlayerDto playerDto1, PlayerDto playerDto2, Map<String, Integer> scorePlayers, GAMESTATE stateGame, String winnerOfTheGame){
+    public GameOutputDto(PlayerDto playerDto1, PlayerDto playerDto2, Map<String, Integer> scorePlayers, GAMESTATE stateGame, String winnerOfTheGame,Boolean deuceRule,String playerHasAdvantage){
         super(playerDto1,playerDto2);
         this.scorePlayers=scorePlayers;
         this.stateGame=stateGame;
         this.winnerOfTheGame= winnerOfTheGame;
+        this.deuceRule=deuceRule;
+        this.advantagePlayer=playerHasAdvantage;
     }
 }
