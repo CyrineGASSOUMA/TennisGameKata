@@ -16,15 +16,15 @@ import lombok.experimental.FieldDefaults;
 public class PlayerDto {
 
     @NonNull
-    @ApiParam(value="The name of the player",example = "")
+    @ApiParam(value="The name of the player",example = "NamePlayer")
     String name;
 
     @NonNull
-    @ApiParam(value="The surname of the player",example = "")
+    @ApiParam(value="The surname of the player",example = "SurnamePlayer")
     String surname;
 
     @NonNull
-    @ApiParam(value="The player win a point or not",example = "")
+    @ApiParam(value="The player win a point or not",example = "true")
     Boolean winAPoint;
 
 }
