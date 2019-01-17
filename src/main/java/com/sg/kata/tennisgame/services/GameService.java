@@ -45,11 +45,12 @@ public class GameService implements  IGameService{
     public GameOutputDto playTennisGameService(PlayerDto player1, PlayerDto player2 ) throws GameClosedException,SaveUpdateDBException,PlayerNotFoundException,SearchParamsException,NoWinnerOfPointException,PlayersNotExistException {
         String winnerOfTheGame = "";
         PlayerDto loserOfTheGame = null;
+        String playerHasAdvantage="";
+        Boolean deuce=false;
         logger.info("Check the actual game if exists or create a new game");
         GameModel currentGame = checkOrInitialiseTheGame(player1, player2);
         logger.info("check if the two players exist in the database");
         if (checkPlayers(player1, player2)){
-
             logger.info("Check if the game is still in progress");
             if (currentGame.getStateGame() == GAMESTATE.INPROGRESS) {
                 logger.info("get the player who win a point");
@@ -57,40 +58,39 @@ public class GameService implements  IGameService{
                 logger.info("Get the looser of the point");
                 loserOfTheGame = (!winnerOfThePoint.equals(player1)) ? player1 : player2;
                 logger.info("Get the model of the winner from the database");
-
                 PlayerModel winnerOfThePointModel = playerService.getPlayerModelByNameAndSurname(winnerOfThePoint.getName(), winnerOfThePoint.getSurname()).get(0);
                 logger.info("if his last score is 40 and he is wining a point => he is a winner of the game");
+                PlayerModel looser = playerService.getPlayerModelByNameAndSurname(loserOfTheGame.getName(), loserOfTheGame.getSurname()).get(0);
+                logger.info("Check if we have a winner : One player have the score 40 and the other a score less than 40 or the player who has the advantage win a point");
+                if(playerService.playerHasAdvantage(winnerOfThePointModel) || (winnerOfThePointModel.getScore() == 40 && looser.getScore()<40) ){
+                    logger.info("Close the game when finding a winner ");
+                    winnerOfTheGame = closeTheGame(winnerOfThePointModel,  looser,currentGame);
+                }
+                else if(currentGame.isDeuce()){
+                    logger.info("associate the advantage to the winner if the deuce rule is activated");
+                    winnerOfThePointModel.setHasAdvantage(true);
+                    playerHasAdvantage= winnerOfThePointModel.getName()+" "+winnerOfThePointModel.getSurname()+" has the advantage";
+                    playerService.saveOrUpdatePlayer(looser);
+                    currentGame.setDeuce(false);
+                    saveOrUpdateGame(currentGame);
+                }
+                else if(winnerOfThePointModel.getScore()!=40) {
+                    logger.info(" increment the score of the winner of the point if his actual score isn't 40");
+                    winnerOfThePointModel.setScore(getTheNewScore(winnerOfThePointModel.getScore()));
 
-                    if (winnerOfThePointModel.getScore() == 40) {
-                        logger.info("set the score of the winner to 0");
-                        winnerOfThePointModel.setScore(0);
-                        logger.info("Change the state of the Game to Finished");
-                        currentGame.setStateGame(GAMESTATE.FINISHED);
-                        logger.info("Update the Game in the database");
-                        try {
-                            saveOrUpdateGame(currentGame);
-                        } catch (SaveUpdateDBException e) {
-                            e.printStackTrace();
-                        }
-                        logger.info("Change the infos of the winner");
-                        winnerOfTheGame = winnerOfThePointModel.getName() + " " + winnerOfThePointModel.getSurname();
-                        winnerOfThePointModel.setWinAPoint(true);
-                        logger.info("Change the infos of the looser");
-                        PlayerModel looser = playerService.getPlayerModelByNameAndSurname(loserOfTheGame.getName(), loserOfTheGame.getSurname()).get(0);
-                        looser.setGame(currentGame);
-                        looser.setScore(0);
-                        logger.info("Update the looser in the database");
-                        try {
-                            playerService.saveOrUpdatePlayer(looser);
-                        } catch (SaveUpdateDBException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else {
-                        logger.info(" increment the score of the winner of the point");
-                        winnerOfThePointModel.setScore(getTheNewScore(winnerOfThePointModel.getScore()));
+                }
+                    if((isDeuce(player1,player2)) &&!winnerOfThePointModel.getHasAdvantage()){
+                        logger.info("activate the deuce rule if the score of the players is 40 and the winner hasn' the advantage");
+                        currentGame.setDeuce(true);
+                        saveOrUpdateGame(currentGame);
+                        looser.setHasAdvantage(false);
+                       deuce=true;
 
                     }
+                    int x=2;
+
+                    winnerOfThePointModel.getSurname();
+
                 logger.info("update the winner in the db");
                 try {
                     playerService.saveOrUpdatePlayer(winnerOfThePointModel);
@@ -114,8 +114,53 @@ public class GameService implements  IGameService{
                 .stateGame(currentGame.getStateGame())
                 .scorePlayers(myMap)
                 .winnerOfTheGame(winnerOfTheGame)
+                .deuceRule(deuce)
+                .playerHasAdvantage(playerHasAdvantage)
                 .build();
         return  gameOutputDto;
+    }
+
+
+    /**
+     * Update the information of the players and the game when the game is finished and return the winner
+     * @param winnerOfThePointModel
+     * @param looser
+     * @param currentGame
+     * @return String
+     */
+    private String closeTheGame(PlayerModel winnerOfThePointModel, PlayerModel looser, GameModel currentGame){
+        logger.info("set the score of the winner to 0");
+        winnerOfThePointModel.setScore(0);
+        logger.info("Change the state of the Game to Finished");
+        currentGame.setStateGame(GAMESTATE.FINISHED);
+        logger.info("Update the Game in the database");
+        try {
+            saveOrUpdateGame(currentGame);
+        } catch (SaveUpdateDBException e) {
+            e.printStackTrace();
+        }
+        logger.info("Change the infos of the winner");
+        String winnerOfTheGame = winnerOfThePointModel.getName() + " " + winnerOfThePointModel.getSurname();
+        winnerOfThePointModel.setWinAPoint(true);
+        logger.info("Change the infos of the looser");
+        looser.setGame(currentGame);
+        looser.setScore(0);
+        logger.info("Update the looser in the database");
+        try {
+            playerService.saveOrUpdatePlayer(looser);
+        } catch (SaveUpdateDBException e) {
+            e.printStackTrace();
+        }
+        return winnerOfTheGame;
+    }
+
+
+    private Boolean isDeuce(PlayerDto playerDto1, PlayerDto playerDto2) throws SearchParamsException {
+        if(playerService.findPlayerScoreByNameSurnameService(playerDto1.getName(),playerDto1.getSurname())==
+                playerService.findPlayerScoreByNameSurnameService(playerDto2.getName(),playerDto2.getSurname())&&
+                playerService.findPlayerScoreByNameSurnameService(playerDto1.getName(),playerDto1.getSurname()) ==40
+        )    return true;
+        else return false;
     }
 
     /**
@@ -177,9 +222,9 @@ public class GameService implements  IGameService{
         logger.info("initialise the players of the new game");
         List<PlayerModel> playerModelList= new ArrayList<>();
         try{
-            PlayerModel playerModel1 =playerService.saveOrUpdatePlayer(new PlayerModel(player1.getName(),player1.getSurname(),0,false));
+            PlayerModel playerModel1 =playerService.saveOrUpdatePlayer(new PlayerModel(player1.getName(),player1.getSurname(),0,false,false));
             playerModel1.setGame(null);
-            PlayerModel playerModel2 = playerService.saveOrUpdatePlayer(new PlayerModel(player2.getName(),player2.getSurname(),0,false));
+            PlayerModel playerModel2 = playerService.saveOrUpdatePlayer(new PlayerModel(player2.getName(),player2.getSurname(),0,false,false));
             playerModel2.setGame(null);
             playerModelList.add(playerModel1);
             playerModelList.add(playerModel2);
@@ -203,7 +248,7 @@ public class GameService implements  IGameService{
     private GameModel initialiseGameWithPlayers(PlayerDto player1,PlayerDto player2) throws SaveUpdateDBException{
         logger.info("initialise the game with its players");
         List<PlayerModel> currentPlayersList = initialisePlayers(player1,player2);
-        GameModel gameModel = saveOrUpdateGame(new GameModel(0L,"Game 1",GAMESTATE.INPROGRESS,currentPlayersList));
+        GameModel gameModel = saveOrUpdateGame(new GameModel(0L,"Game 1",GAMESTATE.INPROGRESS,false,currentPlayersList));
         currentPlayersList.forEach(playerItem->{
             playerItem.setGame(gameModel);
             try {

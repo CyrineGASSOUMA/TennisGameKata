@@ -37,6 +37,11 @@ public class GameModel {
     @Enumerated(EnumType.STRING)
     GAMESTATE stateGame;
 
+    @Column(name="deuce_rule")
+    @NonNull
+    @ApiModelProperty(value="The deuce rule is activated or not ")
+    boolean deuce;
+
 
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
     @ApiModelProperty(value="The list of the player in the Game",example = "")

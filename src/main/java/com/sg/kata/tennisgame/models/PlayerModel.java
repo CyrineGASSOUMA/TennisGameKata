@@ -48,5 +48,10 @@ public class PlayerModel {
     @ApiModelProperty(value="The game where the player play",example = "")
     GameModel game;
 
+    @Column(name="has_advantage")
+    @NonNull
+    @ApiModelProperty(value="The player has advantage or not",example = "")
+    Boolean hasAdvantage;
+
 
 }
