@@ -28,7 +28,7 @@ public class GameModel {
 
     @Column(name="name_game")
     @NonNull
-    @ApiModelProperty(value="The name of the game",example = "Game1")
+    @ApiModelProperty(value="The name of the game",example = "Game")
     String nameGame;
 
     @Column(name="state")
@@ -47,6 +47,11 @@ public class GameModel {
     @ApiModelProperty(value="The list of the player in the Game",example = "")
     List<PlayerModel> playerModelList;
 
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_set")
+    @ApiModelProperty(value="The set of games",example = "")
+    SetModel setModel;
 
 
 }

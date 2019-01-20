@@ -26,17 +26,27 @@ public class TennisSetController {
     @Autowired
     ISetService setService;
 
+    /**
+     * Playing a set of a tennis game
+     * @param gameDto
+     * @return ResultDto<SetOutputDto>
+     * @throws Exception
+     */
     @CrossOrigin
     @PostMapping("/play/{gameDto}")
-    public ResultDto<SetOutputDto> play(@RequestBody @Valid @ApiParam("The information of the input object") GameDto gameDto ) throws Exception {
-        logger.info("Play a game");
+    public ResultDto<SetOutputDto> playSet(@RequestBody @Valid @ApiParam("The information of the input object") GameDto gameDto ) throws SetClosedException {
+        logger.info("Play a set of a tennis game");
         ResultDto<SetOutputDto>resultDto= new ResultDto<>();
 
         try{
             resultDto.setCode("Success");
-            resultDto.setMessage("Playing The Game");
+            resultDto.setMessage("Playing The Tennis SET within a tennis match");
             resultDto.setData(setService.playSetTennis(gameDto));
 
+        }
+        catch(SetClosedException setClosedexception){
+            resultDto.setCode(setClosedexception.getCode());
+            resultDto.setMessage(setClosedexception.getMessage());
         }
         catch(GameClosedException gameClosedException){
             resultDto.setCode(gameClosedException.getCode());

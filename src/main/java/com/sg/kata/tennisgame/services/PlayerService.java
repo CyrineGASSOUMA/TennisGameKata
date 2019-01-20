@@ -95,8 +95,15 @@ public class PlayerService implements IPlayerService {
 
     }
 
+    /**
+     * Check The Player who has the advantage
+     * @param playerModel
+     * @param idGame
+     * @return Boolean
+     */
     @Transactional
     public  Boolean playerHasAdvantage(PlayerModel playerModel, Long idGame){
+        logger.info("check the player who has the advantage");
         return playerRepository.findPlayerByNameAndSurname(playerModel.getName(),playerModel.getSurname(),idGame).get(0).getHasAdvantage();
 
     }

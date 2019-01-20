@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.List;
 
 @FieldDefaults(level= AccessLevel.PRIVATE)
 @Data
@@ -34,6 +35,12 @@ public class SetModel {
     @ApiModelProperty(value="The state of the set",example = "FINISHed")
     @Enumerated(EnumType.STRING)
     GAMESTATE stateGame;
+
+
+
+    @OneToMany(mappedBy = "setModel", fetch = FetchType.LAZY)
+    @ApiModelProperty(value="The list of games in the set")
+    List<GameModel> gameModelList;
 
 
 }

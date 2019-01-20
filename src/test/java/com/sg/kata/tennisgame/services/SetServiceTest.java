@@ -82,16 +82,15 @@ public class SetServiceTest {
         playerModelList.add(playerModel1);
         playerModelList.add(playerModel2);
         gameModelList= new ArrayList<>();
-        gameModel = new GameModel(1L,"Game1",gamestate,false,playerModelList);
+        gameModel = new GameModel(1L,"Game1",gamestate,false,playerModelList,null);
         gameModelList.add(gameModel);
-        when(gameService.playTennisGameService(playerDto1, playerDto2)).thenReturn(gameOutputDto);
+        //when(gameService.playTennisGameService(playerDto1, playerDto2)).thenReturn(gameOutputDto);
         when(gameService.findGames()).thenReturn(gameModelList);
 
     }
 
     @Test
-    public void playSetTennisTest() throws SaveUpdateDBException, SearchParamsException, NoWinnerOfPointException, PlayerNotFoundException, PlayersNotExistException, GameClosedException {
-        //SetOutputDto setOutputDtoResult = setService.playSetTennis();
+    public void playSetTennisTest() throws SaveUpdateDBException, SearchParamsException, NoWinnerOfPointException, PlayerNotFoundException, PlayersNotExistException, GameClosedException, SetClosedException {
         SetOutputDto setOutputDtoResult = setService.playSetTennis(gameOutputDto);
     }
 }

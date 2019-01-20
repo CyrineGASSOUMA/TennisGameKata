@@ -1,12 +1,12 @@
 package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
-import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
 import com.sg.kata.tennisgame.enums.GAMESTATE;
-import com.sg.kata.tennisgame.services.GameService;
+import com.sg.kata.tennisgame.models.GameModel;
+import com.sg.kata.tennisgame.models.PlayerModel;
+import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.services.IGameService;
 import com.sg.kata.tennisgame.services.IPlayerService;
-import com.sg.kata.tennisgame.utils.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static springfox.documentation.builders.PathSelectors.any;
 
 @RunWith(MockitoJUnitRunner.class)
 @WebMvcTest(TennisGameController.class)
@@ -45,6 +43,13 @@ public class TennisControllerTest {
     GameOutputDto gameOutputDto;
     PlayerOutputDto playerOutputDto1, playerOutputDto2;
     List<PlayerOutputDto> playerOutputDtoList;
+    SetModel setModel;
+    List<GameModel>gameModelList;
+    GameModel gameModel;
+    List<PlayerModel>playerModelList;
+    PlayerModel playerModel1,playerModel2;
+
+
 
     @Before
     public void setUp() throws Exception {
@@ -64,33 +69,39 @@ public class TennisControllerTest {
         resultDto.setCode("Succes");
         resultDto.setMessage("Playing");
         resultDto.setData(gameOutputDto);
-        Mockito.when(gameService.playTennisGameService(gameDto.getPlayer1(),gameDto.getPlayer2())).thenReturn(gameOutputDto);
-
-        playerOutputDto1 = new PlayerOutputDto(namePlayer1,surnamePlayer1,30);
+        gameModelList= new ArrayList<>();
+        playerModelList = new ArrayList<>();
+        playerModel1 = new PlayerModel(namePlayer1,surnamePlayer1,40,0,true,false);
+        playerModel2 = new PlayerModel(namePlayer2,surnamePlayer2,15,0,false,false);
+        playerModelList.add(playerModel1);
+        playerModelList.add(playerModel2);
+        gameModel = new GameModel(1L,"Game1",GAMESTATE.INPROGRESS,false,playerModelList,null);
+        gameModelList.add(gameModel);
+        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,gameModelList);
+        playerOutputDto1 = new PlayerOutputDto(namePlayer1,surnamePlayer1,0);
         playerOutputDto2 = new PlayerOutputDto(namePlayer2,surnamePlayer2,40);
         playerOutputDtoList = new ArrayList<>();
         playerOutputDtoList.add(playerOutputDto1);
         playerOutputDtoList.add(playerOutputDto2);
         Mockito.when(playerService.getPlayersWithScore()).thenReturn(playerOutputDtoList);
-
-
-
     }
 
     @Test
     public void playTest() throws Exception {
-        ResultDto<GameOutputDto> resultGameOutputDto= tennisGameController.play(gameDto);
+        ResultDto<GameOutputDto> resultGameOutputDto= tennisGameController.playGame(gameDto);
         assertNotNull(resultGameOutputDto);
-        assertEquals(resultGameOutputDto.getData(),gameOutputDto);
         assertEquals(resultGameOutputDto.getCode(),"Success");
-        assertEquals(resultGameOutputDto.getMessage(),"Playing The Game");
-        assertNotEquals(resultGameOutputDto.getCode(), CODEEXCEPTION.NOTFOUND);
 
     }
 
     @Test
     public void checkTheScoreOfAPlayerControllerTest(){
         ResultDto<PlayerOutputDto> playerOutputDtoResultDto = tennisGameController.checkTheScoreOfAPlayerController(namePlayer1,surnamePlayer1);
+
+        assertEquals(playerOutputDtoResultDto.getCode(),"Success");
+        assertEquals(playerOutputDtoResultDto.getMessage(),"The Score of the player");
+        assertEquals(playerOutputDtoResultDto.getData(),playerOutputDto1);
+
 
     }
 

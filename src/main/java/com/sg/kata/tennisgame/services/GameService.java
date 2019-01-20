@@ -6,6 +6,7 @@ import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
 import com.sg.kata.tennisgame.enums.GAMESTATE;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
+import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.IGameRepository;
 import com.sg.kata.tennisgame.utils.exceptions.*;
 import lombok.AccessLevel;
@@ -42,7 +43,7 @@ public class GameService implements  IGameService{
      * @throws PlayersNotExistException
      */
     @Transactional
-    public GameOutputDto playTennisGameService(PlayerDto player1, PlayerDto player2 ) throws GameClosedException,SaveUpdateDBException,PlayerNotFoundException,SearchParamsException,NoWinnerOfPointException,PlayersNotExistException {
+    public GameOutputDto playTennisGameService(PlayerDto player1, PlayerDto player2, SetModel currentSetModel ) throws GameClosedException,SaveUpdateDBException,PlayerNotFoundException,SearchParamsException,NoWinnerOfPointException,PlayersNotExistException {
         String winnerOfTheGame = "";
         PlayerDto loserOfTheGame = null;
         String playerHasAdvantage="";
@@ -50,7 +51,7 @@ public class GameService implements  IGameService{
         logger.info("Get or create the id of the game");
 
         logger.info("Check the actual game if exists or create a new game");
-        GameModel currentGame = checkOrInitialiseTheGame(getOrCreateIdGame(),player1, player2);
+        GameModel currentGame = checkOrInitialiseTheGame(getOrCreateIdGame(),player1, player2,currentSetModel);
         logger.info("check if the two players exist in the database");
         if (checkPlayers(player1, player2,currentGame.getIdGame())){
             logger.info("Check if the game is still in progress");
@@ -66,7 +67,7 @@ public class GameService implements  IGameService{
                 logger.info("Check if we have a winner : One player have the score 40 and the other a score less than 40 or the player who has the advantage win a point");
                 if(playerService.playerHasAdvantage(winnerOfThePointModel,currentGame.getIdGame()) || (winnerOfThePointModel.getScore() == 40 && looser.getScore()<40) ){
                     logger.info("Close the game when finding a winner ");
-                    winnerOfTheGame = closeTheGame(winnerOfThePointModel,  looser,currentGame);
+                    winnerOfTheGame = closeTheGame(winnerOfThePointModel,  looser,currentGame,currentSetModel);
                 }
                 else if(currentGame.isDeuce()){
                     logger.info("associate the advantage to the winner if the deuce rule is activated");
@@ -74,7 +75,7 @@ public class GameService implements  IGameService{
                     playerHasAdvantage= winnerOfThePointModel.getName()+" "+winnerOfThePointModel.getSurname()+" has the advantage";
                     playerService.saveOrUpdatePlayer(looser);
                     currentGame.setDeuce(false);
-                    saveOrUpdateGame(currentGame);
+                    saveOrUpdateGame(currentGame,currentSetModel);
                 }
                 else if(winnerOfThePointModel.getScore()!=40) {
                     logger.info(" increment the score of the winner of the point if his actual score isn't 40");
@@ -86,7 +87,7 @@ public class GameService implements  IGameService{
 
                         //ici
                         currentGame.setDeuce(true);
-                        saveOrUpdateGame(currentGame);
+                        saveOrUpdateGame(currentGame,currentSetModel);
                         looser.setHasAdvantage(false);
                        deuce=true;
 
@@ -124,10 +125,22 @@ public class GameService implements  IGameService{
     }
 
 
+    /**
+     * Get all the games
+     * @return List<GameModel>
+     */
     private List<GameModel> getAllGames(){
+        logger.info("Get all the games in the db");
         return (List<GameModel>) Optional.ofNullable(gameRepository.findAll()).orElse(null);
     }
+
+    /**
+     * Get the id of the game or create it
+     * @return Long
+     * @throws SaveUpdateDBException
+     */
     private Long getOrCreateIdGame() throws SaveUpdateDBException{
+        logger.info("get the id of the game or create it");
         List<GameModel> gameModelList= getAllGames();
         if(gameModelList.size()==0) return 1L;
         else if(gameModelList.get(gameModelList.size()-1).getStateGame()==GAMESTATE.INPROGRESS){
@@ -149,14 +162,14 @@ public class GameService implements  IGameService{
      * @param currentGame
      * @return String
      */
-    private String closeTheGame(PlayerModel winnerOfThePointModel, PlayerModel looser, GameModel currentGame) throws SearchParamsException {
+    private String closeTheGame(PlayerModel winnerOfThePointModel, PlayerModel looser, GameModel currentGame,SetModel currentSetModel) throws SearchParamsException {
         logger.info("set the score of the winner to 0");
         winnerOfThePointModel.setScore(0);
         logger.info("Change the state of the Game to Finished");
         currentGame.setStateGame(GAMESTATE.FINISHED);
         logger.info("Update the Game in the database");
         try {
-            saveOrUpdateGame(currentGame);
+            saveOrUpdateGame(currentGame,currentSetModel);
         } catch (SaveUpdateDBException e) {
             e.printStackTrace();
         }
@@ -186,13 +199,26 @@ public class GameService implements  IGameService{
         return winnerOfTheGame;
     }
 
+    /**
+     * Find games
+     * @return List<GameModel>
+     */
     @Transactional
     public List<GameModel> findGames(){
+        logger.info("Get the games that exist in the db");
         return (List<GameModel>) Optional.ofNullable(gameRepository.findAll()).orElse(null);
 
     }
 
+    /**
+     * Get the score of the set
+     * @param playerModel
+     * @param idGame
+     * @return int
+     * @throws SearchParamsException
+     */
     private int getSetScoreOfLastGame(PlayerModel playerModel, Long idGame) throws SearchParamsException {
+        logger.info("Get the score of the set of the player");
         return Optional.ofNullable(playerService.getPlayerModelByNameAndSurname(playerModel.getName(),playerModel.getSurname(),idGame -1).
                 get(0).getScoreSet()).orElse(0);
     }
@@ -243,9 +269,9 @@ public class GameService implements  IGameService{
      * @return GameModel
      * @throws SaveUpdateDBException
      */
-    private GameModel checkOrInitialiseTheGame(Long idGame,PlayerDto player1, PlayerDto player2) throws  SaveUpdateDBException{
+    private GameModel checkOrInitialiseTheGame(Long idGame,PlayerDto player1, PlayerDto player2,SetModel setModel) throws  SaveUpdateDBException{
         logger.info("Check if the game exist or initialise it");
-        return (getGameById(idGame)==null)?initialiseGameWithPlayers(player1,player2):getGameById(idGame);
+        return (getGameById(idGame)==null)?initialiseGameWithPlayers(player1,player2,setModel):getGameById(idGame);
     }
 
 
@@ -255,8 +281,9 @@ public class GameService implements  IGameService{
      * @return GameModel
      * @throws SaveUpdateDBException
      */
-    private GameModel saveOrUpdateGame(GameModel gameModel) throws SaveUpdateDBException{
+    private GameModel saveOrUpdateGame(GameModel gameModel, SetModel setModel) throws SaveUpdateDBException{
         logger.info("save or update a game in the database");
+        gameModel.setSetModel(setModel);
         return Optional.ofNullable(gameRepository.save(gameModel))
                 .orElseThrow(()->new SaveUpdateDBException(this.getClass(), CODEEXCEPTION.SAVEUPDATEPROBLEM.getCodeValue(), "Database save/ update problem"));
     }
@@ -294,36 +321,33 @@ public class GameService implements  IGameService{
      * @return GameModel
      * @throws SaveUpdateDBException
      */
-    private GameModel initialiseGameWithPlayers(PlayerDto player1,PlayerDto player2) throws SaveUpdateDBException{
+    private GameModel initialiseGameWithPlayers(PlayerDto player1,PlayerDto player2,SetModel setModel) throws SaveUpdateDBException{
         logger.info("initialise the game with its players");
         List<GameModel> gameModelList= getAllGames();
         if(gameModelList.size()==0){
             List<PlayerModel> currentPlayersList = initialisePlayers(player1,player2);
-            GameModel gameModel = saveOrUpdateGame(new GameModel(0L,"Game 1",GAMESTATE.INPROGRESS,false,currentPlayersList));
-            currentPlayersList.forEach(playerItem->{
-                playerItem.setGame(gameModel);
-                try {
-                    playerService.saveOrUpdatePlayer(playerItem);
-                } catch (SaveUpdateDBException e) {
-                    e.printStackTrace();
-                }
-            });
-            return gameModel;
+            return associatePlayersToGame(currentPlayersList,setModel);
         }
         else if(gameModelList.get(gameModelList.size()-1).getStateGame()==GAMESTATE.FINISHED  ){
             List<PlayerModel> currentPlayersList = initialisePlayers(player1,player2);
-            GameModel gameModel = saveOrUpdateGame(new GameModel(0L,"Game 1",GAMESTATE.INPROGRESS,false,currentPlayersList));
-            currentPlayersList.forEach(playerItem->{
-                playerItem.setGame(gameModel);
-                try {
-                    playerService.saveOrUpdatePlayer(playerItem);
-                } catch (SaveUpdateDBException e) {
-                    e.printStackTrace();
-                }
-            });
-            return gameModel;
+            return associatePlayersToGame(currentPlayersList,setModel);
+
         }
        else return gameModelList.get(gameModelList.size()-1);
+
+    }
+
+    private GameModel associatePlayersToGame(List<PlayerModel> currentPlayersList, SetModel setModel) throws SaveUpdateDBException {
+        GameModel gameModel = saveOrUpdateGame(new GameModel(0L,"Game",GAMESTATE.INPROGRESS,false,currentPlayersList,null),setModel);
+        currentPlayersList.forEach(playerItem->{
+            playerItem.setGame(gameModel);
+            try {
+                playerService.saveOrUpdatePlayer(playerItem);
+            } catch (SaveUpdateDBException e) {
+                e.printStackTrace();
+            }
+        });
+        return gameModel;
 
     }
 
