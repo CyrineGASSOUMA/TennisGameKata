@@ -67,8 +67,8 @@ public class GameServiceTest {
         playerDto3 = new PlayerDto(namePlayer1,surnamePlayer1,true);
         playerDto4 = new PlayerDto(namePlayer2,surnamePlayer2,false);
 
-        playerModel1 = new PlayerModel("Roger","Federer",15,true,false);
-        playerModel2 = new PlayerModel("Jimmy","Connors",40,false,false);
+        playerModel1 = new PlayerModel("Roger","Federer",15,0,true,false);
+        playerModel2 = new PlayerModel("Jimmy","Connors",40,0,false,false);
         playerModelList = new ArrayList<>();
         playerModelList.add(playerModel1);
         playerModelList.add(playerModel2);
@@ -83,9 +83,9 @@ public class GameServiceTest {
 
         when(playerService.saveOrUpdatePlayer(playerModel1)).thenReturn(playerModel1);
         when(playerService.saveOrUpdatePlayer(playerModel2)).thenReturn(playerModel2);
-        when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1)).thenReturn(firstPlayerList);
-        when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2)).thenReturn(secondPlayerList);
-        when(playerService.findPlayerScoreByNameSurnameService(namePlayer1,surnamePlayer1)).thenReturn(15);
+        when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1,1L)).thenReturn(firstPlayerList);
+        when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2,1L)).thenReturn(secondPlayerList);
+        when(playerService.findPlayerScoreByNameSurnameService(namePlayer1,surnamePlayer1,1L)).thenReturn(15);
 
         when(gameRepository.findById(1L)).thenReturn(Optional.of(gameModel));
         when(gameRepository.save(gameModel)).thenReturn(gameModel);

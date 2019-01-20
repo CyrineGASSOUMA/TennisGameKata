@@ -29,7 +29,7 @@ public class GameOutputDto extends GameDto {
     String winnerOfTheGame;
 
     @ApiModelProperty(value="The Deuce role is activated or not")
-    Boolean deuceRule;
+    boolean deuceRule;
 
     @ApiModelProperty(value="The player who has the advantage if the deuce rule is activated")
     String advantagePlayer;

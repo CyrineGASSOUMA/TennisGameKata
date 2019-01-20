@@ -39,9 +39,9 @@ public class PlayerService implements IPlayerService {
      * @throws SearchParamsException
      */
     @Transactional
-    public List<PlayerModel> getPlayerModelByNameAndSurname(String name, String surname)throws  SearchParamsException{
+    public List<PlayerModel> getPlayerModelByNameAndSurname(String name, String surname,Long idGame)throws  SearchParamsException{
         logger.info("Get the player by its name and surname from the database");
-        return Optional.ofNullable(playerRepository.findPlayerByNameAndSurname(name,surname))
+        return Optional.ofNullable(playerRepository.findPlayerByNameAndSurname(name,surname,idGame))
                                 .orElseThrow(()->new SearchParamsException(this.getClass(), CODEEXCEPTION.SEARCHPARAMS.getCodeValue(), "Params for searching aren't good"));
 
 
@@ -71,9 +71,9 @@ public class PlayerService implements IPlayerService {
      * @throws SearchParamsException
      */
     @Transactional
-    public int findPlayerScoreByNameSurnameService(String name, String surname) throws SearchParamsException{
+    public int findPlayerScoreByNameSurnameService(String name, String surname,Long idGame) throws SearchParamsException{
         logger.info("get the actual score of a player by its name and surname from the database");
-        return  Optional.ofNullable(playerRepository.findPlayerScoreByNameSurname(name,surname))
+        return  Optional.ofNullable(playerRepository.findPlayerScoreByNameSurname(name,surname,idGame))
                 .orElseThrow(()->new SearchParamsException(this.getClass(), CODEEXCEPTION.SEARCHPARAMS.getCodeValue(), "Params for searching aren't good"));
 
     }
@@ -96,8 +96,8 @@ public class PlayerService implements IPlayerService {
     }
 
     @Transactional
-    public  Boolean playerHasAdvantage(PlayerModel playerModel){
-        return playerRepository.findPlayerByNameAndSurname(playerModel.getName(),playerModel.getSurname()).get(0).getHasAdvantage();
+    public  Boolean playerHasAdvantage(PlayerModel playerModel, Long idGame){
+        return playerRepository.findPlayerByNameAndSurname(playerModel.getName(),playerModel.getSurname(),idGame).get(0).getHasAdvantage();
 
     }
 }

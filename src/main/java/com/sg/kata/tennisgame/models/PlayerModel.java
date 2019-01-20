@@ -38,6 +38,11 @@ public class PlayerModel {
     @ApiModelProperty(value="The actual score of the player",example = "")
     int score;
 
+    @Column(name="score_set")
+    @NonNull
+    @ApiModelProperty(value="The actual score of the player",example = "")
+    int scoreSet;
+
     @Column(name="win_a_point")
     @NonNull
     @ApiModelProperty(value="The player win a point or not",example = "")

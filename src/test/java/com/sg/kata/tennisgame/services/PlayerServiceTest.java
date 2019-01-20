@@ -41,18 +41,18 @@ public class PlayerServiceTest {
     public void init(){
         name="Nadal";
         surname = "Raphael";
-        playerModel = new PlayerModel("Nadal","Raphael",0,true,false);
+        playerModel = new PlayerModel("Nadal","Raphael",0,0,true,false);
         playerModel.setIdPlayer(1L);
         playerModelList= new ArrayList<>();
         playerModelList.add(playerModel);
-        when(playerRepository.findPlayerByNameAndSurname(name,surname)).thenReturn(playerModelList);
+        when(playerRepository.findPlayerByNameAndSurname(name,surname,1l)).thenReturn(playerModelList);
         when(playerRepository.save(playerModel)).thenReturn(playerModel);
         when(playerRepository.findAll()).thenReturn(playerModelList);
     }
 
     @Test
     public void getPlayerModelByNameAndSurnameTest()throws  DataException,SearchParamsException{
-        PlayerModel playerModelResult = playerService.getPlayerModelByNameAndSurname(name,surname).get(0);
+        PlayerModel playerModelResult = playerService.getPlayerModelByNameAndSurname(name,surname,1l).get(0);
         assertNotNull(playerModelResult);
         assertEquals(playerModelResult.getName(),name);
         assertEquals(playerModelResult.getSurname(),surname);
@@ -88,13 +88,13 @@ public class PlayerServiceTest {
 
     @Test
     public void findPlayerScoreByNameSurnameServiceTest()throws Exception{
-        int score = playerService.findPlayerScoreByNameSurnameService(playerModel.getName(),playerModel.getSurname());
+        int score = playerService.findPlayerScoreByNameSurnameService(playerModel.getName(),playerModel.getSurname(),1L);
         assertEquals(score,0);
     }
 
     @Test
     public void playerHasAdvantageTest(){
-        Boolean playerHasAdvantageResult = playerService.playerHasAdvantage(playerModel);
+        Boolean playerHasAdvantageResult = playerService.playerHasAdvantage(playerModel,1L);
         assertNotNull(playerHasAdvantageResult);
         assertEquals(playerHasAdvantageResult,false);
 

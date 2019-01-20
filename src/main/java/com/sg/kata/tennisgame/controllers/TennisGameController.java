@@ -101,7 +101,7 @@ public class TennisGameController {
         try{
             resultDto.setCode("Success");
             resultDto.setMessage("The Score of the player");
-            resultDto.setData(new PlayerOutputDto(name,surname,playerService.findPlayerScoreByNameSurnameService(name,surname)));
+            resultDto.setData(new PlayerOutputDto(name,surname,playerService.findPlayerScoreByNameSurnameService(name,surname,1L)));
 
 
 
