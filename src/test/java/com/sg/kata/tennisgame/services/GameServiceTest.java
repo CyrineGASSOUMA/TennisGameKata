@@ -5,6 +5,7 @@ import com.sg.kata.tennisgame.dto.PlayerDto;
 import com.sg.kata.tennisgame.enums.GAMESTATE;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
+import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.IGameRepository;
 import com.sg.kata.tennisgame.repositories.IPlayerRepository;
 import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
@@ -51,6 +52,8 @@ public class GameServiceTest {
 
     List <PlayerModel> firstPlayerList;
     List<PlayerModel>secondPlayerList;
+    SetModel setModel;
+    List<GameModel>gameModelList;
 
 
 
@@ -61,14 +64,15 @@ public class GameServiceTest {
         namePlayer2="Jimmy";
         surnamePlayer1="Federer";
         surnamePlayer2="Connors";
+        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,null);
         playerDto1 = new PlayerDto(namePlayer1,surnamePlayer1,false);
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
 
         playerDto3 = new PlayerDto(namePlayer1,surnamePlayer1,true);
         playerDto4 = new PlayerDto(namePlayer2,surnamePlayer2,false);
 
-        playerModel1 = new PlayerModel("Roger","Federer",15,true,false);
-        playerModel2 = new PlayerModel("Jimmy","Connors",40,false,false);
+        playerModel1 = new PlayerModel("Roger","Federer",15,0,true,false);
+        playerModel2 = new PlayerModel("Jimmy","Connors",40,0,false,false);
         playerModelList = new ArrayList<>();
         playerModelList.add(playerModel1);
         playerModelList.add(playerModel2);
@@ -78,14 +82,15 @@ public class GameServiceTest {
         secondPlayerList= new ArrayList<>();
         secondPlayerList.add(playerModel2);
 
-        gameModel= new GameModel(1L,"Game 1", GAMESTATE.INPROGRESS,false,playerModelList);
-
-
+        gameModel= new GameModel(1L,"Game 1", GAMESTATE.INPROGRESS,false,playerModelList,null);
+        gameModelList=new ArrayList<>();
+        gameModelList.add(gameModel);
+        setModel.setGameModelList(gameModelList);
         when(playerService.saveOrUpdatePlayer(playerModel1)).thenReturn(playerModel1);
         when(playerService.saveOrUpdatePlayer(playerModel2)).thenReturn(playerModel2);
-        when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1)).thenReturn(firstPlayerList);
-        when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2)).thenReturn(secondPlayerList);
-        when(playerService.findPlayerScoreByNameSurnameService(namePlayer1,surnamePlayer1)).thenReturn(15);
+        when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1,1L)).thenReturn(firstPlayerList);
+        when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2,1L)).thenReturn(secondPlayerList);
+        when(playerService.findPlayerScoreByNameSurnameService(namePlayer1,surnamePlayer1,1L)).thenReturn(15);
 
         when(gameRepository.findById(1L)).thenReturn(Optional.of(gameModel));
         when(gameRepository.save(gameModel)).thenReturn(gameModel);
@@ -95,19 +100,16 @@ public class GameServiceTest {
 
 
     }
-
     @Test
     public void playTennisGameANdFinishingItServiceTest()throws Exception{
-        GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto1,playerDto2);
+        GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto1,playerDto2,setModel);
         assertNotNull(gameOutputDtoResult.getScorePlayers());
         assertEquals(gameOutputDtoResult.getScorePlayers().size(),2);
-       // assertEquals(gameOutputDtoResult.getScorePlayers().keySet().forEach();,"0");
         assertEquals(gameOutputDtoResult.getStateGame(),GAMESTATE.FINISHED);
         assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),"Jimmy Connors");
         assertEquals(gameOutputDtoResult.getPlayer1().getName(),"Roger");
         assertEquals(gameOutputDtoResult.getPlayer1().getSurname(),"Federer");
         assertEquals(gameOutputDtoResult.getPlayer1().getWinAPoint(),false);
-
         List<String> players= new ArrayList<>();
         gameOutputDtoResult.getScorePlayers().keySet().forEach((k)->players.add(k));
         assertNotNull(players);
@@ -116,18 +118,11 @@ public class GameServiceTest {
         assertEquals(gameOutputDtoResult.getPlayer2().getName(),"Jimmy");
         assertEquals(gameOutputDtoResult.getPlayer2().getSurname(),"Connors");
         assertEquals(gameOutputDtoResult.getPlayer2().getWinAPoint(),true);
-
-
-
-
-
-
-
     }
 
     @Test
     public void playTennisGameServiceTest()throws Exception{
-        GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto3,playerDto4);
+        GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto3,playerDto4,setModel);
         assertNotNull(gameOutputDtoResult);
         assertEquals(gameOutputDtoResult.getStateGame(),GAMESTATE.INPROGRESS);
         assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),"");

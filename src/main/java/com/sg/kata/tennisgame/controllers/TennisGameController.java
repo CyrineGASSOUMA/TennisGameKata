@@ -2,6 +2,8 @@ package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
 import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
+import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.services.IGameService;
 import com.sg.kata.tennisgame.services.IPlayerService;
 import com.sg.kata.tennisgame.services.PlayerService;
@@ -33,16 +35,22 @@ public class TennisGameController {
     @Autowired
     IPlayerService playerService;
 
+    /**
+     * Playing a game of a tennis set
+     * @param gameDto
+     * @return ResultDto<GameOutputDto>
+     * @throws Exception
+     */
     @CrossOrigin
     @PostMapping("/play/{gameDto}")
-    public ResultDto<GameOutputDto> play(@RequestBody @Valid @ApiParam("The information of the input object") GameDto gameDto ) throws Exception {
+    public ResultDto<GameOutputDto> playGame(@RequestBody @Valid @ApiParam("The information of the input object") GameDto gameDto ) throws Exception {
         logger.info("Play a game");
         ResultDto<GameOutputDto>resultDto= new ResultDto<>();
 
         try{
             resultDto.setCode("Success");
-            resultDto.setMessage("Playing The Game");
-            resultDto.setData(gameService.playTennisGameService(gameDto.getPlayer1(),gameDto.getPlayer2()));
+            resultDto.setMessage("Playing The GAME within a set of a tennis match ");
+            resultDto.setData(gameService.playTennisGameService(gameDto.getPlayer1(),gameDto.getPlayer2(),new SetModel(1L,"Set 1", GAMESTATE.INPROGRESS,null)));
 
         }
         catch(GameClosedException gameClosedException){
@@ -101,7 +109,7 @@ public class TennisGameController {
         try{
             resultDto.setCode("Success");
             resultDto.setMessage("The Score of the player");
-            resultDto.setData(new PlayerOutputDto(name,surname,playerService.findPlayerScoreByNameSurnameService(name,surname)));
+            resultDto.setData(new PlayerOutputDto(name,surname,playerService.findPlayerScoreByNameSurnameService(name,surname,1L)));
 
 
 

@@ -45,8 +45,9 @@ public class IGamerepositoryTest {
 
     @Before
     public void init(){
-        gameModel= new GameModel(1L,"Game 1", GAMESTATE.FINISHED,false,null);
-        playerModel = new PlayerModel("Philipe","UYTR",30,true,false);
+        //ici
+        gameModel= new GameModel(1L,"Game 1", GAMESTATE.FINISHED,false,null,null);
+        playerModel = new PlayerModel("Philipe","UYTR",30,0,true,false);
         playerModel.setGame(gameModel);
         playerModel.setIdPlayer(1L);
         when(playerRepository.save(playerModel)).thenReturn(playerModel);

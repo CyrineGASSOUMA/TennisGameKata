@@ -14,14 +14,14 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class PlayerOutputDto {
     @NonNull
-    @ApiParam(value="The name of the player",example = "")
+    @ApiParam(value="The name of the player",example = "Name1")
     String name;
 
     @NonNull
-    @ApiParam(value="The surname of the player",example = "")
+    @ApiParam(value="The surname of the player",example = "Surname1")
     String surname;
 
     @NonNull
-    @ApiParam(value="The surname of the player",example = "")
+    @ApiParam(value="The surname of the player",example = "15")
     int score;
 }

@@ -49,9 +49,10 @@ public class IPlayerRepositoryTest {
     List<PlayerModel> playerModelList;
     @Before
     public void init(){
-        gameModel = new GameModel(1L,"Game 1", GAMESTATE.FINISHED,false,null);
+        //ici
+        gameModel = new GameModel(1L,"Game 1", GAMESTATE.FINISHED,false,null,null);
         //when(gameRepository.save(gameModel)).thenReturn(gameModel);
-        playerModel = new PlayerModel("Philipe","UYTR",30,true,false);
+        playerModel = new PlayerModel("Philipe","UYTR",30,0,true,false);
         playerModel.setGame(gameModel);
         playerModel.setIdPlayer(1L);
         playerModelList = new ArrayList<>();

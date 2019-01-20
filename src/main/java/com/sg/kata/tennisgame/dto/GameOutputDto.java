@@ -29,13 +29,13 @@ public class GameOutputDto extends GameDto {
     String winnerOfTheGame;
 
     @ApiModelProperty(value="The Deuce role is activated or not")
-    Boolean deuceRule;
+    boolean deuceRule;
 
     @ApiModelProperty(value="The player who has the advantage if the deuce rule is activated")
     String advantagePlayer;
 
     @Builder
-    public GameOutputDto(PlayerDto playerDto1, PlayerDto playerDto2, Map<String, Integer> scorePlayers, GAMESTATE stateGame, String winnerOfTheGame,Boolean deuceRule,String playerHasAdvantage){
+    public GameOutputDto(PlayerDto playerDto1, PlayerDto playerDto2, Map<String, Integer> scorePlayers, GAMESTATE stateGame, String winnerOfTheGame,boolean deuceRule,String playerHasAdvantage){
         super(playerDto1,playerDto2);
         this.scorePlayers=scorePlayers;
         this.stateGame=stateGame;

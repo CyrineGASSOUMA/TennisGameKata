@@ -30,27 +30,32 @@ public class PlayerModel {
 
     @Column(name="surname")
     @NonNull
-    @ApiModelProperty(value="The surname of the player",example = "")
+    @ApiModelProperty(value="The surname of the player")
     String surname;
 
     @Column(name="score")
     @NonNull
-    @ApiModelProperty(value="The actual score of the player",example = "")
+    @ApiModelProperty(value="The actual score of the player")
     int score;
+
+    @Column(name="score_set")
+    @NonNull
+    @ApiModelProperty(value="The actual score of the player")
+    int scoreSet;
 
     @Column(name="win_a_point")
     @NonNull
-    @ApiModelProperty(value="The player win a point or not",example = "")
+    @ApiModelProperty(value="The player win a point or not")
     Boolean winAPoint;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_game")
-    @ApiModelProperty(value="The game where the player play",example = "")
+    @ApiModelProperty(value="The game where the player play")
     GameModel game;
 
     @Column(name="has_advantage")
     @NonNull
-    @ApiModelProperty(value="The player has advantage or not",example = "")
+    @ApiModelProperty(value="The player has advantage or not")
     Boolean hasAdvantage;
 
 
