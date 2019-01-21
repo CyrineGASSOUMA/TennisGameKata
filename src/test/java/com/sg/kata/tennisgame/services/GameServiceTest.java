@@ -7,7 +7,6 @@ import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.IGameRepository;
-import com.sg.kata.tennisgame.repositories.IPlayerRepository;
 import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
 import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
 import lombok.AccessLevel;
@@ -64,7 +63,7 @@ public class GameServiceTest {
         namePlayer2="Jimmy";
         surnamePlayer1="Federer";
         surnamePlayer2="Connors";
-        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,null);
+        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,null,false);
         playerDto1 = new PlayerDto(namePlayer1,surnamePlayer1,false);
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
 
@@ -106,7 +105,7 @@ public class GameServiceTest {
         assertNotNull(gameOutputDtoResult.getScorePlayers());
         assertEquals(gameOutputDtoResult.getScorePlayers().size(),2);
         assertEquals(gameOutputDtoResult.getStateGame(),GAMESTATE.FINISHED);
-        assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),"Jimmy Connors");
+        assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),playerDto2);
         assertEquals(gameOutputDtoResult.getPlayer1().getName(),"Roger");
         assertEquals(gameOutputDtoResult.getPlayer1().getSurname(),"Federer");
         assertEquals(gameOutputDtoResult.getPlayer1().getWinAPoint(),false);
@@ -125,7 +124,7 @@ public class GameServiceTest {
         GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto3,playerDto4,setModel);
         assertNotNull(gameOutputDtoResult);
         assertEquals(gameOutputDtoResult.getStateGame(),GAMESTATE.INPROGRESS);
-        assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),"");
+        assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),playerDto3);
 
 
     }

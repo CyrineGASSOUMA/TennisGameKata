@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @ApiOperation("Player DTO")
 @Data
 @AllArgsConstructor
@@ -14,10 +14,9 @@ import lombok.experimental.FieldDefaults;
 @Setter
 public class GameDto {
 
-
-    @ApiParam(value="The first player")
+    @ApiParam(value = "The first player")
     PlayerDto player1;
 
-    @ApiParam(value="The second player")
+    @ApiParam(value = "The second player")
     PlayerDto player2;
 }

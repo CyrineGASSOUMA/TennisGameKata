@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -50,7 +52,7 @@ public class SetServiceTest {
     String winnerOfTheGame,advantagePlayer,namePlayer1,namePlayer2,surnamePlayer1,surnamePlayer2 ;
     boolean deuceRule;
     PlayerModel playerModel1,playerModel2;
-    GameModel gameModel;
+    GameModel gameModel1,gameModel2;
     List<GameModel>gameModelList;
     List<PlayerModel>playerModelList;
 
@@ -69,28 +71,40 @@ public class SetServiceTest {
         winnerOfTheGame="";
         advantagePlayer="";
         deuceRule=false;
-        gameOutputDto = new GameOutputDto(playerDto1,playerDto2,scorePlayersList,gamestate,winnerOfTheGame,deuceRule,advantagePlayer);
         playerModel1 = new PlayerModel(namePlayer1,surnamePlayer1,40,0,true,false);
         playerModel2 = new PlayerModel(namePlayer2,surnamePlayer2,15,0,false,false);
         List<PlayerModel> playerModelList1 = new ArrayList<>();
         playerModelList1.add(playerModel1);
         List<PlayerModel> playerModelList2 = new ArrayList<>();
-        playerModelList1.add(playerModel2);
+        playerModelList2.add(playerModel2);
         when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1,1L)).thenReturn(playerModelList1);
         when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2,1L)).thenReturn(playerModelList2);
+        when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1,2L)).thenReturn(playerModelList1);
+        when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2,2L)).thenReturn(playerModelList2);
+        gameModel1 = new GameModel(1L,"Game1",GAMESTATE.FINISHED,false,playerModelList,null);
+        gameModel2 = new GameModel(2L,"Game1",gamestate,false,playerModelList,null);
         playerModelList = new ArrayList<>();
+        playerModel1.setGame(gameModel1);
+        playerModel2.setGame(gameModel2);
         playerModelList.add(playerModel1);
         playerModelList.add(playerModel2);
         gameModelList= new ArrayList<>();
-        gameModel = new GameModel(1L,"Game1",gamestate,false,playerModelList,null);
-        gameModelList.add(gameModel);
-        //when(gameService.playTennisGameService(playerDto1, playerDto2)).thenReturn(gameOutputDto);
+
+
+        gameModelList.add(gameModel1);
+        gameModelList.add(gameModel2);
         when(gameService.findGames()).thenReturn(gameModelList);
+        gameOutputDto = new GameOutputDto(playerDto1,playerDto2,scorePlayersList,gamestate,null,deuceRule,advantagePlayer);
 
     }
 
     @Test
     public void playSetTennisTest() throws SaveUpdateDBException, SearchParamsException, NoWinnerOfPointException, PlayerNotFoundException, PlayersNotExistException, GameClosedException, SetClosedException {
         SetOutputDto setOutputDtoResult = setService.playSetTennis(gameOutputDto);
+        assertEquals(setOutputDtoResult.getGamestate(),GAMESTATE.INPROGRESS);
+        assertEquals(setOutputDtoResult.getPlayer1(),playerDto1);
+        assertEquals(setOutputDtoResult.getPlayer2(),playerDto2);
+        assertEquals(setOutputDtoResult.getLooserSetScore(),0);
+        assertNotNull(setOutputDtoResult);
     }
 }
