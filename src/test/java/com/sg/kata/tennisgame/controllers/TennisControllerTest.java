@@ -64,7 +64,7 @@ public class TennisControllerTest {
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
         gameDto = new GameDto(playerDto1,playerDto2);
         Map<String,Integer> mapResult = new HashMap<>();
-        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,"Roger Federer",false,"");
+        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,playerDto2,false,"");
         resultDto = new ResultDto<>();
         resultDto.setCode("Succes");
         resultDto.setMessage("Playing");
@@ -77,7 +77,7 @@ public class TennisControllerTest {
         playerModelList.add(playerModel2);
         gameModel = new GameModel(1L,"Game1",GAMESTATE.INPROGRESS,false,playerModelList,null);
         gameModelList.add(gameModel);
-        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,gameModelList);
+        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,gameModelList, false);
         playerOutputDto1 = new PlayerOutputDto(namePlayer1,surnamePlayer1,0);
         playerOutputDto2 = new PlayerOutputDto(namePlayer2,surnamePlayer2,40);
         playerOutputDtoList = new ArrayList<>();

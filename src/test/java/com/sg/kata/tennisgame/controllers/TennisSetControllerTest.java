@@ -9,11 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,10 +48,10 @@ public class TennisSetControllerTest {
         playerDto1 = new PlayerDto(namePlayer1,surnamePlayer1,false);
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
         gameDto = new GameDto(playerDto1,playerDto2);
-        setOutputDto= new SetOutputDto(gameDto.getPlayer1(),gameDto.getPlayer2(), GAMESTATE.INPROGRESS,null,0,0);
+        setOutputDto= new SetOutputDto(gameDto.getPlayer1(),gameDto.getPlayer2(), GAMESTATE.INPROGRESS,null,0,0,false);
         Map<String,Integer> mapResult = new HashMap<>();
         mapResult.put("",0);
-        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,"Roger Federer",false,"");
+        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,playerDto2,false,"");
         resultDto=new ResultDto<>();
         resultDto.setCode("Success");
         resultDto.setMessage("We are playing");

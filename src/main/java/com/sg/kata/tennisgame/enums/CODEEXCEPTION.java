@@ -11,8 +11,7 @@ public enum CODEEXCEPTION {
     PLAYERNOTFOUND("One player isn't found in the database"),
     SAVEUPDATEPROBLEM("A problem occured when saving or updating in database"),
     SEARCHPARAMS("Params for searching aren't good"),
-    UNKNOWN("Unknown Error")
-    ;
+    UNKNOWN("Unknown Error");
     private final String codeValue;
 
     CODEEXCEPTION(String value) {
