@@ -1,6 +1,6 @@
 package com.sg.kata.tennisgame.dto;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.*;
@@ -22,7 +22,7 @@ public class SetOutputDto {
     PlayerDto player2;
 
     @ApiParam(value = "Thestate of the set")
-    GAMESTATE gamestate;
+    GameState gameState;
 
     @ApiParam(value = "The winner of the set")
     PlayerDto winnerOfTheSet;

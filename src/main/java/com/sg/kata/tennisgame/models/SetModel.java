@@ -1,6 +1,6 @@
 package com.sg.kata.tennisgame.models;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -34,7 +34,7 @@ public class SetModel {
     @NonNull
     @ApiModelProperty(value = "The state of the set", example = "FINISHed")
     @Enumerated(EnumType.STRING)
-    GAMESTATE stateGame;
+    GameState stateGame;
 
 
     @OneToMany(mappedBy = "setModel", fetch = FetchType.LAZY)

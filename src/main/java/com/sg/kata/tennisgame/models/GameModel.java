@@ -1,9 +1,8 @@
 package com.sg.kata.tennisgame.models;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -28,14 +27,14 @@ public class GameModel {
 
     @Column(name = "name_game")
     @NonNull
-    @ApiModelProperty(value = "The name of the game", example = "Game")
+    @ApiModelProperty(value = "The name of the game", example = "GameTennis")
     String nameGame;
 
     @Column(name = "state")
     @NonNull
     @ApiModelProperty(value = "The state of the game", example = "FINISHed")
     @Enumerated(EnumType.STRING)
-    GAMESTATE stateGame;
+    GameState stateGame;
 
     @Column(name = "deuce_rule")
     @NonNull
@@ -44,7 +43,7 @@ public class GameModel {
 
 
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
-    @ApiModelProperty(value = "The list of the player in the Game", example = "")
+    @ApiModelProperty(value = "The list of the player in the GameTennis", example = "")
     List<PlayerModel> playerModelList;
 
 

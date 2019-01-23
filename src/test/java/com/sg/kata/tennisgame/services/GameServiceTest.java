@@ -2,13 +2,16 @@ package com.sg.kata.tennisgame.services;
 
 import com.sg.kata.tennisgame.dto.GameOutputDto;
 import com.sg.kata.tennisgame.dto.PlayerDto;
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.IGameRepository;
-import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
-import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
+import com.sg.kata.tennisgame.exceptions.SaveUpdateDBException;
+import com.sg.kata.tennisgame.exceptions.SearchParamsException;
+import com.sg.kata.tennisgame.services.GameTennis.GameService;
+import com.sg.kata.tennisgame.services.GameTennis.IGameService;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.Before;
@@ -63,7 +66,7 @@ public class GameServiceTest {
         namePlayer2="Jimmy";
         surnamePlayer1="Federer";
         surnamePlayer2="Connors";
-        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,null,false);
+        setModel= new SetModel(1L,"Set", GameState.INPROGRESS,null,false);
         playerDto1 = new PlayerDto(namePlayer1,surnamePlayer1,false);
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
 
@@ -81,7 +84,7 @@ public class GameServiceTest {
         secondPlayerList= new ArrayList<>();
         secondPlayerList.add(playerModel2);
 
-        gameModel= new GameModel(1L,"Game 1", GAMESTATE.INPROGRESS,false,playerModelList,null);
+        gameModel= new GameModel(1L,"GameTennis 1", GameState.INPROGRESS,false,playerModelList,null);
         gameModelList=new ArrayList<>();
         gameModelList.add(gameModel);
         setModel.setGameModelList(gameModelList);
@@ -104,7 +107,7 @@ public class GameServiceTest {
         GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto1,playerDto2,setModel);
         assertNotNull(gameOutputDtoResult.getScorePlayers());
         assertEquals(gameOutputDtoResult.getScorePlayers().size(),2);
-        assertEquals(gameOutputDtoResult.getStateGame(),GAMESTATE.FINISHED);
+        assertEquals(gameOutputDtoResult.getStateGame(), GameState.FINISHED);
         assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),playerDto2);
         assertEquals(gameOutputDtoResult.getPlayer1().getName(),"Roger");
         assertEquals(gameOutputDtoResult.getPlayer1().getSurname(),"Federer");
@@ -123,7 +126,7 @@ public class GameServiceTest {
     public void playTennisGameServiceTest()throws Exception{
         GameOutputDto gameOutputDtoResult = gameService.playTennisGameService(playerDto3,playerDto4,setModel);
         assertNotNull(gameOutputDtoResult);
-        assertEquals(gameOutputDtoResult.getStateGame(),GAMESTATE.INPROGRESS);
+        assertEquals(gameOutputDtoResult.getStateGame(), GameState.INPROGRESS);
         assertEquals(gameOutputDtoResult.getWinnerOfTheGame(),playerDto3);
 
 

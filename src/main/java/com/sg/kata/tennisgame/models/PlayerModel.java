@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity(name = "Player")
-@ApiModel(value = "Player Model")
+@ApiModel(value = "PlayerTennis Model")
 public class PlayerModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
