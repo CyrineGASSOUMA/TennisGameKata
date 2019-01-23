@@ -1,7 +1,7 @@
 package com.sg.kata.tennisgame.services.PlayerTennis;
 
 import com.sg.kata.tennisgame.dto.PlayerOutputDto;
-import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
+import com.sg.kata.tennisgame.enums.CodeException;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.repositories.IPlayerRepository;
 import com.sg.kata.tennisgame.exceptions.SaveUpdateDBException;
@@ -21,12 +21,16 @@ import java.util.Optional;
 import static com.sg.kata.tennisgame.utils.PlayerMapper.PLAYER_MAPPER;
 
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class PlayerService implements IPlayerService {
     Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
-    @Autowired
     IPlayerRepository playerRepository;
+
+    @Autowired
+    public PlayerService(IPlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
     /**
      * find player in the db by his name and his surname
@@ -40,7 +44,7 @@ public class PlayerService implements IPlayerService {
     public List<PlayerModel> getPlayerModelByNameAndSurname(String name, String surname, Long idGame) throws SearchParamsException {
         logger.info("Get the player by its name and surname from the database");
         return Optional.ofNullable(playerRepository.findPlayerByNameAndSurname(name, surname, idGame))
-                .orElseThrow(() -> new SearchParamsException(this.getClass(), CODEEXCEPTION.SEARCHPARAMS.getCodeValue(), "Params for searching aren't good"));
+                .orElseThrow(() -> new SearchParamsException(this.getClass(), CodeException.SEARCHPARAMS.getCodeValue(), "Params for searching aren't good"));
 
 
     }
@@ -56,7 +60,7 @@ public class PlayerService implements IPlayerService {
     public PlayerModel saveOrUpdatePlayer(PlayerModel playerModel) throws SaveUpdateDBException {
         logger.info("save or update a player in the database");
         return Optional.ofNullable(playerRepository.save(playerModel))
-                .orElseThrow(() -> new SaveUpdateDBException(this.getClass(), CODEEXCEPTION.SAVEUPDATEPROBLEM.getCodeValue(), "Database save/ update problem"));
+                .orElseThrow(() -> new SaveUpdateDBException(this.getClass(), CodeException.SAVEUPDATEPROBLEM.getCodeValue(), "Database save/ update problem"));
 
     }
 
@@ -72,7 +76,7 @@ public class PlayerService implements IPlayerService {
     public int findPlayerScoreByNameSurnameService(String name, String surname, Long idGame) throws SearchParamsException {
         logger.info("get the actual score of a player by its name and surname from the database");
         return Optional.ofNullable(playerRepository.findPlayerScoreByNameSurname(name, surname, idGame))
-                .orElseThrow(() -> new SearchParamsException(this.getClass(), CODEEXCEPTION.SEARCHPARAMS.getCodeValue(), "Params for searching aren't good"));
+                .orElseThrow(() -> new SearchParamsException(this.getClass(), CodeException.SEARCHPARAMS.getCodeValue(), "Params for searching aren't good"));
 
     }
 

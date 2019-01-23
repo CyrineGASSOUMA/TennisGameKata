@@ -4,8 +4,8 @@ import com.sg.kata.tennisgame.dto.GameDto;
 import com.sg.kata.tennisgame.dto.GameOutputDto;
 import com.sg.kata.tennisgame.dto.PlayerDto;
 import com.sg.kata.tennisgame.dto.SetOutputDto;
-import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.CodeException;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
@@ -23,18 +23,20 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class SetService implements ISetService {
     Logger logger = LoggerFactory.getLogger(SetService.class);
 
-    @Autowired
     ISetRepository setRepository;
-
-    @Autowired
     IPlayerService playerService;
+    IGameService gameService;
 
     @Autowired
-    IGameService gameService;
+    public SetService(ISetRepository setRepository, IPlayerService playerService, IGameService gameService) {
+        this.setRepository = setRepository;
+        this.playerService = playerService;
+        this.gameService = gameService;
+    }
 
 
     /**
@@ -64,8 +66,8 @@ public class SetService implements ISetService {
         SetOutputDto setOutputDtoResult = null;
         logger.info("create a current set");
         SetModel currentSetModel = findOrCreateSet(1L);
-        if (currentSetModel.getStateGame().equals(GAMESTATE.FINISHED))
-            throw new SetClosedException(this.getClass(), CODEEXCEPTION.CLOSEDSET.getCodeValue(), "The Set is Closed");
+        if (currentSetModel.getStateGame().equals(GameState.FINISHED))
+            throw new SetClosedException(this.getClass(), CodeException.CLOSEDSET.getCodeValue(), "The Set is Closed");
 
         logger.info("Play The first GameTennis of the Set");
         if (gameService.findGames().size() <= 1) {
@@ -89,7 +91,7 @@ public class SetService implements ISetService {
                     logger.info("we can close the set because one player reached a score of 6 and the other the score of 4 or less");
                     winnerSetScore = winnerSet.getScoreSet();
                     looserSetScore = looserSet.getScoreSet();
-                    currentSetModel.setStateGame(GAMESTATE.FINISHED);
+                    currentSetModel.setStateGame(GameState.FINISHED);
                     saveOrUpdateSet(currentSetModel);
                     setOutputDtoResult = new SetOutputDto(gameDto.getPlayer1(), gameDto.getPlayer2(), currentSetModel.getStateGame(), new PlayerDto(winnerSet.getName(), winnerSet.getSurname(), true), winnerSetScore, looserSetScore, false);
                 } else if (looserSet.getScoreSet() == 5) {
@@ -105,7 +107,7 @@ public class SetService implements ISetService {
                 looserSet = getLooserOfSet(playerModel1, playerModel2);
                 winnerSetScore = winnerSet.getScoreSet();
                 looserSetScore = looserSet.getScoreSet();
-                currentSetModel.setStateGame(GAMESTATE.FINISHED);
+                currentSetModel.setStateGame(GameState.FINISHED);
                 saveOrUpdateSet(currentSetModel);
                 setOutputDtoResult = new SetOutputDto(gameDto.getPlayer1(), gameDto.getPlayer2(), currentSetModel.getStateGame(), new PlayerDto(winnerSet.getName(), winnerSet.getSurname(), true), winnerSetScore, looserSetScore, false);
             }
@@ -145,7 +147,7 @@ public class SetService implements ISetService {
             }
             if (getENdTieBreakRule(playerModel1, playerModel2)) {
                 logger.info("we can close the set because we get the final tie break score");
-                currentSetModel.setStateGame(GAMESTATE.FINISHED);
+                currentSetModel.setStateGame(GameState.FINISHED);
                 saveOrUpdateSet(currentSetModel);
                 setOutputDtoResult = new SetOutputDto(gameDto.getPlayer1(), gameDto.getPlayer2(), currentSetModel.getStateGame(), new PlayerDto("", "", true), winnerSetScore, looserSetScore, true);
             }
@@ -241,7 +243,7 @@ public class SetService implements ISetService {
     private SetModel saveOrUpdateSet(SetModel setModel) throws SaveUpdateDBException {
         logger.info("save or update a player in the database");
         return Optional.ofNullable(setRepository.save(setModel))
-                .orElseThrow(() -> new SaveUpdateDBException(this.getClass(), CODEEXCEPTION.SAVEUPDATEPROBLEM.getCodeValue(), "Database save/ update problem"));
+                .orElseThrow(() -> new SaveUpdateDBException(this.getClass(), CodeException.SAVEUPDATEPROBLEM.getCodeValue(), "Database save/ update problem"));
 
     }
 
@@ -255,7 +257,7 @@ public class SetService implements ISetService {
         logger.info("Get The Set of Tennis By its id");
         Optional<SetModel> setModel = Optional.of(setRepository.findById(idSet)).orElse(null);
         return (setModel.isPresent()) ? setModel.get()
-                : new SetModel(idSet, "Set 1", GAMESTATE.INPROGRESS, null, false);
+                : new SetModel(idSet, "Set 1", GameState.INPROGRESS, null, false);
 
     }
 

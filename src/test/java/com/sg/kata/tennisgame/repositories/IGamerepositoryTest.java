@@ -1,6 +1,6 @@
 package com.sg.kata.tennisgame.repositories;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import org.hibernate.exception.DataException;
@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +44,7 @@ public class IGamerepositoryTest {
     @Before
     public void init(){
         //ici
-        gameModel= new GameModel(1L,"GameTennis 1", GAMESTATE.FINISHED,false,null,null);
+        gameModel= new GameModel(1L,"GameTennis 1", GameState.FINISHED,false,null,null);
         playerModel = new PlayerModel("Philipe","UYTR",30,0,true,false);
         playerModel.setGame(gameModel);
         playerModel.setIdPlayer(1L);
@@ -59,7 +57,7 @@ public class IGamerepositoryTest {
         assertNotNull(gameModelResult);
         assertEquals(Optional.ofNullable(gameModelResult.getIdGame()),Optional.of(1L));
         assertEquals(gameModelResult.getNameGame(),"GameTennis 1");
-        assertEquals(gameModelResult.getStateGame(),GAMESTATE.FINISHED);
+        assertEquals(gameModelResult.getStateGame(), GameState.FINISHED);
         assertNull(gameModelResult.getPlayerModelList());
         assertNotSame(gameModelResult,gameModel);
 

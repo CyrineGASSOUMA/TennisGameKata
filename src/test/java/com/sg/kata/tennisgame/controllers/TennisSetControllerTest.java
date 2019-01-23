@@ -1,7 +1,7 @@
 package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.services.SetTennis.ISetService;
 import com.sg.kata.tennisgame.exceptions.*;
 import org.junit.Before;
@@ -48,10 +48,10 @@ public class TennisSetControllerTest {
         playerDto1 = new PlayerDto(namePlayer1,surnamePlayer1,false);
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
         gameDto = new GameDto(playerDto1,playerDto2);
-        setOutputDto= new SetOutputDto(gameDto.getPlayer1(),gameDto.getPlayer2(), GAMESTATE.INPROGRESS,null,0,0,false);
+        setOutputDto= new SetOutputDto(gameDto.getPlayer1(),gameDto.getPlayer2(), GameState.INPROGRESS,null,0,0,false);
         Map<String,Integer> mapResult = new HashMap<>();
         mapResult.put("",0);
-        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,playerDto2,false,"");
+        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GameState.INPROGRESS,playerDto2,false,"");
         resultDto=new ResultDto<>();
         resultDto.setCode("Success");
         resultDto.setMessage("We are playing");

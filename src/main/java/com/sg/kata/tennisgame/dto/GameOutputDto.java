@@ -1,6 +1,6 @@
 package com.sg.kata.tennisgame.dto;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.*;
@@ -23,7 +23,7 @@ public class GameOutputDto extends GameDto {
 
     @ApiModelProperty(value = "The state of the game", example = "FINISHed")
     @Enumerated(EnumType.STRING)
-    GAMESTATE stateGame;
+    GameState stateGame;
 
     @ApiModelProperty(value = "The name and the surname of the winAPoint of the game")
     PlayerDto winnerOfTheGame;
@@ -35,7 +35,7 @@ public class GameOutputDto extends GameDto {
     String advantagePlayer;
 
     @Builder
-    public GameOutputDto(PlayerDto playerDto1, PlayerDto playerDto2, Map<String, Integer> scorePlayers, GAMESTATE stateGame, PlayerDto winnerOfTheGame, boolean deuceRule, String playerHasAdvantage) {
+    public GameOutputDto(PlayerDto playerDto1, PlayerDto playerDto2, Map<String, Integer> scorePlayers, GameState stateGame, PlayerDto winnerOfTheGame, boolean deuceRule, String playerHasAdvantage) {
         super(playerDto1, playerDto2);
         this.scorePlayers = scorePlayers;
         this.stateGame = stateGame;

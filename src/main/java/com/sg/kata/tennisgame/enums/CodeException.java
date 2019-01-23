@@ -1,8 +1,6 @@
 package com.sg.kata.tennisgame.enums;
 
-import lombok.AllArgsConstructor;
-
-public enum CODEEXCEPTION {
+public enum CodeException {
     NOWINNEROFPOINT("There is no winner of point"),
     NOTFOUND("PlayerTennis Not Found"),
     CLOSED("The GameTennis is Closed"),
@@ -14,7 +12,7 @@ public enum CODEEXCEPTION {
     UNKNOWN("Unknown Error");
     private final String codeValue;
 
-    CODEEXCEPTION(String value) {
+    CodeException(String value) {
         this.codeValue = value;
     }
 

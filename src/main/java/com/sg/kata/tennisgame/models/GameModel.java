@@ -1,9 +1,8 @@
 package com.sg.kata.tennisgame.models;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -35,7 +34,7 @@ public class GameModel {
     @NonNull
     @ApiModelProperty(value = "The state of the game", example = "FINISHed")
     @Enumerated(EnumType.STRING)
-    GAMESTATE stateGame;
+    GameState stateGame;
 
     @Column(name = "deuce_rule")
     @NonNull

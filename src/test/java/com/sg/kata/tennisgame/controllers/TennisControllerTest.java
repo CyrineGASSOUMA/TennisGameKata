@@ -1,7 +1,7 @@
 package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
@@ -64,7 +64,7 @@ public class TennisControllerTest {
         playerDto2 = new PlayerDto(namePlayer2,surnamePlayer2,true);
         gameDto = new GameDto(playerDto1,playerDto2);
         Map<String,Integer> mapResult = new HashMap<>();
-        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GAMESTATE.INPROGRESS,playerDto2,false,"");
+        gameOutputDto= new GameOutputDto(playerDto1,playerDto2,mapResult, GameState.INPROGRESS,playerDto2,false,"");
         resultDto = new ResultDto<>();
         resultDto.setCode("Succes");
         resultDto.setMessage("Playing");
@@ -75,9 +75,9 @@ public class TennisControllerTest {
         playerModel2 = new PlayerModel(namePlayer2,surnamePlayer2,15,0,false,false);
         playerModelList.add(playerModel1);
         playerModelList.add(playerModel2);
-        gameModel = new GameModel(1L,"Game1",GAMESTATE.INPROGRESS,false,playerModelList,null);
+        gameModel = new GameModel(1L,"Game1", GameState.INPROGRESS,false,playerModelList,null);
         gameModelList.add(gameModel);
-        setModel= new SetModel(1L,"Set",GAMESTATE.INPROGRESS,gameModelList, false);
+        setModel= new SetModel(1L,"Set", GameState.INPROGRESS,gameModelList, false);
         playerOutputDto1 = new PlayerOutputDto(namePlayer1,surnamePlayer1,0);
         playerOutputDto2 = new PlayerOutputDto(namePlayer2,surnamePlayer2,40);
         playerOutputDtoList = new ArrayList<>();

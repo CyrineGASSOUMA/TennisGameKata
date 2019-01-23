@@ -1,6 +1,6 @@
 package com.sg.kata.tennisgame.repositories;
 
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import org.hibernate.exception.DataException;
@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
-
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @EnableJpaRepositories(basePackageClasses = IGameRepository.class)
@@ -42,7 +40,7 @@ public class IPlayerRepositoryTest {
     @Before
     public void init(){
         //ici
-        gameModel = new GameModel(1L,"GameTennis 1", GAMESTATE.FINISHED,false,null,null);
+        gameModel = new GameModel(1L,"GameTennis 1", GameState.FINISHED,false,null,null);
         //when(gameRepository.save(gameModel)).thenReturn(gameModel);
         playerModel = new PlayerModel("Philipe","UYTR",30,0,true,false);
         playerModel.setGame(gameModel);
