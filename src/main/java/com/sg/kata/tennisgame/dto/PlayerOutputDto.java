@@ -6,7 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ApiOperation("Player Output DTO")
+@ApiOperation("PlayerTennis Output DTO")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

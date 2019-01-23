@@ -3,11 +3,15 @@ package com.sg.kata.tennisgame.services;
 import com.sg.kata.tennisgame.dto.GameOutputDto;
 import com.sg.kata.tennisgame.dto.PlayerDto;
 import com.sg.kata.tennisgame.dto.SetOutputDto;
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.repositories.ISetRepository;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.exceptions.*;
+import com.sg.kata.tennisgame.services.GameTennis.IGameService;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
+import com.sg.kata.tennisgame.services.SetTennis.ISetService;
+import com.sg.kata.tennisgame.services.SetTennis.SetService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.Before;
@@ -48,7 +52,7 @@ public class SetServiceTest {
 
     PlayerDto playerDto1, playerDto2;
     Map<String, Integer> scorePlayersList;
-    GAMESTATE gamestate;
+    GameState gameState;
     String winnerOfTheGame,advantagePlayer,namePlayer1,namePlayer2,surnamePlayer1,surnamePlayer2 ;
     boolean deuceRule;
     PlayerModel playerModel1,playerModel2;
@@ -67,7 +71,7 @@ public class SetServiceTest {
         scorePlayersList= new HashMap<>();
         scorePlayersList.put(namePlayer1+" "+surnamePlayer1,40);
         scorePlayersList.put(namePlayer2+" "+surnamePlayer2,15);
-        gamestate= GAMESTATE.INPROGRESS;
+        gameState = GameState.INPROGRESS;
         winnerOfTheGame="";
         advantagePlayer="";
         deuceRule=false;
@@ -81,8 +85,8 @@ public class SetServiceTest {
         when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2,1L)).thenReturn(playerModelList2);
         when(playerService.getPlayerModelByNameAndSurname(namePlayer1,surnamePlayer1,2L)).thenReturn(playerModelList1);
         when(playerService.getPlayerModelByNameAndSurname(namePlayer2,surnamePlayer2,2L)).thenReturn(playerModelList2);
-        gameModel1 = new GameModel(1L,"Game1",GAMESTATE.FINISHED,false,playerModelList,null);
-        gameModel2 = new GameModel(2L,"Game1",gamestate,false,playerModelList,null);
+        gameModel1 = new GameModel(1L,"Game1", GameState.FINISHED,false,playerModelList,null);
+        gameModel2 = new GameModel(2L,"Game1", gameState,false,playerModelList,null);
         playerModelList = new ArrayList<>();
         playerModel1.setGame(gameModel1);
         playerModel2.setGame(gameModel2);
@@ -94,14 +98,14 @@ public class SetServiceTest {
         gameModelList.add(gameModel1);
         gameModelList.add(gameModel2);
         when(gameService.findGames()).thenReturn(gameModelList);
-        gameOutputDto = new GameOutputDto(playerDto1,playerDto2,scorePlayersList,gamestate,null,deuceRule,advantagePlayer);
+        gameOutputDto = new GameOutputDto(playerDto1,playerDto2,scorePlayersList, gameState,null,deuceRule,advantagePlayer);
 
     }
 
     @Test
     public void playSetTennisTest() throws SaveUpdateDBException, SearchParamsException, NoWinnerOfPointException, PlayerNotFoundException, PlayersNotExistException, GameClosedException, SetClosedException {
         SetOutputDto setOutputDtoResult = setService.playSetTennis(gameOutputDto);
-        assertEquals(setOutputDtoResult.getGamestate(),GAMESTATE.INPROGRESS);
+        assertEquals(setOutputDtoResult.getGameState(), GameState.INPROGRESS);
         assertEquals(setOutputDtoResult.getPlayer1(),playerDto1);
         assertEquals(setOutputDtoResult.getPlayer2(),playerDto2);
         assertEquals(setOutputDtoResult.getLooserSetScore(),0);

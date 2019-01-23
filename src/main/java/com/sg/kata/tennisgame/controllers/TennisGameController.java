@@ -1,18 +1,18 @@
 package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
-import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
-import com.sg.kata.tennisgame.enums.GAMESTATE;
+import com.sg.kata.tennisgame.enums.CodeException;
+import com.sg.kata.tennisgame.enums.GameState;
 import com.sg.kata.tennisgame.models.SetModel;
-import com.sg.kata.tennisgame.services.IGameService;
-import com.sg.kata.tennisgame.services.IPlayerService;
-import com.sg.kata.tennisgame.services.PlayerService;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.services.GameTennis.IGameService;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
+import com.sg.kata.tennisgame.exceptions.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = {"/kata/tennis/game/"})
-@Api(value = "Tennis Game", tags = {"Tennis Game"}, description = "The controller that allows a tennis refree to manage a score of a game")
+@Api(value = "Tennis GameTennis", tags = {"Tennis GameTennis"}, description = "The controller that allows a tennis refree to manage a score of a game")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TennisGameController {
     Logger logger = LoggerFactory.getLogger(TennisGameController.class);
@@ -51,7 +50,7 @@ public class TennisGameController {
         try {
             resultDto.setCode("Success");
             resultDto.setMessage("Playing The GAME within a set of a tennis match ");
-            resultDto.setData(gameService.playTennisGameService(gameDto.getPlayer1(), gameDto.getPlayer2(), new SetModel(1L, "Set 1", GAMESTATE.INPROGRESS, null, false)));
+            resultDto.setData(gameService.playTennisGameService(gameDto.getPlayer1(), gameDto.getPlayer2(), new SetModel(1L, "Set 1", GameState.INPROGRESS, null, false)));
 
         } catch (GameClosedException gameClosedException) {
             resultDto.setCode(gameClosedException.getCode());
@@ -79,7 +78,7 @@ public class TennisGameController {
 
         } catch (Exception e) {
             resultDto.setCode("Error");
-            resultDto.setMessage(CODEEXCEPTION.UNKNOWN.getCodeValue());
+            resultDto.setMessage(CodeException.UNKNOWN.getCodeValue());
             resultDto.setData(new GameOutputDto());
 
 
@@ -111,7 +110,7 @@ public class TennisGameController {
             resultDto.setData(null);
         } catch (Exception e) {
             resultDto.setCode("Error");
-            resultDto.setMessage(CODEEXCEPTION.UNKNOWN.getCodeValue());
+            resultDto.setMessage(CodeException.UNKNOWN.getCodeValue());
             resultDto.setData(null);
         }
 
@@ -137,7 +136,7 @@ public class TennisGameController {
 
         } catch (Exception e) {
             resultDto.setCode("Error");
-            resultDto.setMessage(CODEEXCEPTION.UNKNOWN.getCodeValue());
+            resultDto.setMessage(CodeException.UNKNOWN.getCodeValue());
             resultDto.setData(null);
         }
         return resultDto;

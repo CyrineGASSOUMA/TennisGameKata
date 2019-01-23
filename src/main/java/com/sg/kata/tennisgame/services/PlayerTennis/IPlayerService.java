@@ -1,10 +1,9 @@
-package com.sg.kata.tennisgame.services;
+package com.sg.kata.tennisgame.services.PlayerTennis;
 
 import com.sg.kata.tennisgame.dto.PlayerOutputDto;
 import com.sg.kata.tennisgame.models.PlayerModel;
-import com.sg.kata.tennisgame.utils.exceptions.PlayersNotExistException;
-import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
-import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
+import com.sg.kata.tennisgame.exceptions.SaveUpdateDBException;
+import com.sg.kata.tennisgame.exceptions.SearchParamsException;
 
 import java.util.List;
 
