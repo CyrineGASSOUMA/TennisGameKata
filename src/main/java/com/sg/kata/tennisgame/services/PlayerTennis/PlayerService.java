@@ -1,13 +1,11 @@
-package com.sg.kata.tennisgame.services;
+package com.sg.kata.tennisgame.services.PlayerTennis;
 
-import com.sg.kata.tennisgame.dto.PlayerDto;
 import com.sg.kata.tennisgame.dto.PlayerOutputDto;
 import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.repositories.IPlayerRepository;
-import com.sg.kata.tennisgame.utils.PlayerMapper;
-import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
-import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
+import com.sg.kata.tennisgame.exceptions.SaveUpdateDBException;
+import com.sg.kata.tennisgame.exceptions.SearchParamsException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.sg.kata.tennisgame.utils.PlayerMapper.PLAYER_MAPPER;
 
@@ -98,7 +95,7 @@ public class PlayerService implements IPlayerService {
     }
 
     /**
-     * Check The Player who has the advantage
+     * Check The PlayerTennis who has the advantage
      *
      * @param playerModel
      * @param idGame

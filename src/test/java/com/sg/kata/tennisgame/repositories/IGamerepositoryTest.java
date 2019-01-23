@@ -46,7 +46,7 @@ public class IGamerepositoryTest {
     @Before
     public void init(){
         //ici
-        gameModel= new GameModel(1L,"Game 1", GAMESTATE.FINISHED,false,null,null);
+        gameModel= new GameModel(1L,"GameTennis 1", GAMESTATE.FINISHED,false,null,null);
         playerModel = new PlayerModel("Philipe","UYTR",30,0,true,false);
         playerModel.setGame(gameModel);
         playerModel.setIdPlayer(1L);
@@ -58,7 +58,7 @@ public class IGamerepositoryTest {
         GameModel gameModelResult = Optional.ofNullable(gameRepository.save(gameModel)).orElse(null);
         assertNotNull(gameModelResult);
         assertEquals(Optional.ofNullable(gameModelResult.getIdGame()),Optional.of(1L));
-        assertEquals(gameModelResult.getNameGame(),"Game 1");
+        assertEquals(gameModelResult.getNameGame(),"GameTennis 1");
         assertEquals(gameModelResult.getStateGame(),GAMESTATE.FINISHED);
         assertNull(gameModelResult.getPlayerModelList());
         assertNotSame(gameModelResult,gameModel);

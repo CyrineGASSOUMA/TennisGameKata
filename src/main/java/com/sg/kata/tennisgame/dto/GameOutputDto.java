@@ -11,7 +11,7 @@ import javax.persistence.Enumerated;
 import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ApiOperation("Game output DTO")
+@ApiOperation("GameTennis output DTO")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

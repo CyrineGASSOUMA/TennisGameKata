@@ -2,8 +2,8 @@ package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
 import com.sg.kata.tennisgame.enums.GAMESTATE;
-import com.sg.kata.tennisgame.services.ISetService;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.services.SetTennis.ISetService;
+import com.sg.kata.tennisgame.exceptions.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

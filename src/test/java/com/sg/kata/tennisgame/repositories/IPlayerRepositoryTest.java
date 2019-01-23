@@ -42,7 +42,7 @@ public class IPlayerRepositoryTest {
     @Before
     public void init(){
         //ici
-        gameModel = new GameModel(1L,"Game 1", GAMESTATE.FINISHED,false,null,null);
+        gameModel = new GameModel(1L,"GameTennis 1", GAMESTATE.FINISHED,false,null,null);
         //when(gameRepository.save(gameModel)).thenReturn(gameModel);
         playerModel = new PlayerModel("Philipe","UYTR",30,0,true,false);
         playerModel.setGame(gameModel);

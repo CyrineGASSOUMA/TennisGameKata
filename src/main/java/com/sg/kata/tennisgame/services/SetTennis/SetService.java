@@ -1,4 +1,4 @@
-package com.sg.kata.tennisgame.services;
+package com.sg.kata.tennisgame.services.SetTennis;
 
 import com.sg.kata.tennisgame.dto.GameDto;
 import com.sg.kata.tennisgame.dto.GameOutputDto;
@@ -10,7 +10,9 @@ import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.ISetRepository;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.exceptions.*;
+import com.sg.kata.tennisgame.services.GameTennis.IGameService;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
@@ -65,7 +67,7 @@ public class SetService implements ISetService {
         if (currentSetModel.getStateGame().equals(GAMESTATE.FINISHED))
             throw new SetClosedException(this.getClass(), CODEEXCEPTION.CLOSEDSET.getCodeValue(), "The Set is Closed");
 
-        logger.info("Play The first Game of the Set");
+        logger.info("Play The first GameTennis of the Set");
         if (gameService.findGames().size() <= 1) {
             gameService.playTennisGameService(gameDto.getPlayer1(), gameDto.getPlayer2(), currentSetModel);
             setOutputDtoResult = new SetOutputDto(gameDto.getPlayer1(), gameDto.getPlayer2(), currentSetModel.getStateGame(), new PlayerDto("", "", true), 0, 0, false);
@@ -122,7 +124,7 @@ public class SetService implements ISetService {
                 logger.info("Get the models of the two players");
                 PlayerModel firstPlayer = playerService.getPlayerModelByNameAndSurname(gameOutputDto.getPlayer1().getName(), gameOutputDto.getPlayer1().getSurname(), lastGame.getIdGame()).get(0);
                 PlayerModel secondPlayer = playerService.getPlayerModelByNameAndSurname(gameOutputDto.getPlayer2().getName(), gameOutputDto.getPlayer2().getSurname(), lastGame.getIdGame()).get(0);
-                logger.info("Get the models of the two players in the Game -1");
+                logger.info("Get the models of the two players in the GameTennis -1");
                 PlayerModel lastGameFirstPlayer = playerService.getPlayerModelByNameAndSurname(gameOutputDto.getPlayer1().getName(), gameOutputDto.getPlayer1().getSurname(), lastGame.getIdGame() - 1).get(0);
                 PlayerModel lastGameSecondPlayer = playerService.getPlayerModelByNameAndSurname(gameOutputDto.getPlayer2().getName(), gameOutputDto.getPlayer2().getSurname(), lastGame.getIdGame() - 1).get(0);
                 logger.info("Identify the actual winner");

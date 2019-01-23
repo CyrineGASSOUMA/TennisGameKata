@@ -7,8 +7,11 @@ import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.IGameRepository;
-import com.sg.kata.tennisgame.utils.exceptions.SaveUpdateDBException;
-import com.sg.kata.tennisgame.utils.exceptions.SearchParamsException;
+import com.sg.kata.tennisgame.exceptions.SaveUpdateDBException;
+import com.sg.kata.tennisgame.exceptions.SearchParamsException;
+import com.sg.kata.tennisgame.services.GameTennis.GameService;
+import com.sg.kata.tennisgame.services.GameTennis.IGameService;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.Before;
@@ -81,7 +84,7 @@ public class GameServiceTest {
         secondPlayerList= new ArrayList<>();
         secondPlayerList.add(playerModel2);
 
-        gameModel= new GameModel(1L,"Game 1", GAMESTATE.INPROGRESS,false,playerModelList,null);
+        gameModel= new GameModel(1L,"GameTennis 1", GAMESTATE.INPROGRESS,false,playerModelList,null);
         gameModelList=new ArrayList<>();
         gameModelList.add(gameModel);
         setModel.setGameModelList(gameModelList);

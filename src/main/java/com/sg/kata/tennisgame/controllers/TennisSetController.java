@@ -2,9 +2,8 @@ package com.sg.kata.tennisgame.controllers;
 
 import com.sg.kata.tennisgame.dto.*;
 import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
-import com.sg.kata.tennisgame.models.PlayerModel;
-import com.sg.kata.tennisgame.services.ISetService;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.services.SetTennis.ISetService;
+import com.sg.kata.tennisgame.exceptions.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import lombok.AccessLevel;

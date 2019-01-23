@@ -1,4 +1,4 @@
-package com.sg.kata.tennisgame.services;
+package com.sg.kata.tennisgame.services.GameTennis;
 
 import com.sg.kata.tennisgame.dto.GameOutputDto;
 import com.sg.kata.tennisgame.dto.PlayerDto;
@@ -8,8 +8,8 @@ import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.PlayerModel;
 import com.sg.kata.tennisgame.models.SetModel;
 import com.sg.kata.tennisgame.repositories.IGameRepository;
-import com.sg.kata.tennisgame.utils.PlayerMapper;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.exceptions.*;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
@@ -100,12 +100,12 @@ public class GameService implements IGameService {
                     e.printStackTrace();
                 }
             } else if (currentGame.getStateGame() == GAMESTATE.FINISHED) {
-                logger.error("The Game is Finished, we can't play more in this game. It's closed");
-                throw new GameClosedException(this.getClass(), CODEEXCEPTION.CLOSED.getCodeValue(), "The Game is closed ");
+                logger.error("The GameTennis is Finished, we can't play more in this game. It's closed");
+                throw new GameClosedException(this.getClass(), CODEEXCEPTION.CLOSED.getCodeValue(), "The GameTennis is closed ");
             }
         }
 
-        logger.info("fill the information of the output : Players + Game +status of the Game and Winner");
+        logger.info("fill the information of the output : Players + GameTennis +status of the GameTennis and Winner");
         Map<String, Integer> myMap = new HashMap<>();
         myMap.put(player1.getName() + " " + player1.getSurname(), playerService.findPlayerScoreByNameSurnameService(player1.getName(), player1.getSurname(), currentGame.getIdGame()));
         myMap.put(player2.getName() + " " + player2.getSurname(), playerService.findPlayerScoreByNameSurnameService(player2.getName(), player2.getSurname(), currentGame.getIdGame()));
@@ -162,9 +162,9 @@ public class GameService implements IGameService {
     private String closeTheGame(PlayerModel winnerOfThePointModel, PlayerModel looser, GameModel currentGame, SetModel currentSetModel) throws SearchParamsException {
         logger.info("set the score of the winner to 0");
         winnerOfThePointModel.setScore(0);
-        logger.info("Change the state of the Game to Finished");
+        logger.info("Change the state of the GameTennis to Finished");
         currentGame.setStateGame(GAMESTATE.FINISHED);
-        logger.info("Update the Game in the database");
+        logger.info("Update the GameTennis in the database");
         try {
             saveOrUpdateGame(currentGame, currentSetModel);
         } catch (SaveUpdateDBException e) {
@@ -253,9 +253,9 @@ public class GameService implements IGameService {
                 playerService.getPlayerModelByNameAndSurname(playerDto2.getName(), playerDto2.getSurname(), idGame).size() == 0))
             throw new PlayersNotExistException(this.getClass(), CODEEXCEPTION.PLAYERSNOTFOUND.getCodeValue(), "Two players doesn't exist");
         else if (playerService.getPlayerModelByNameAndSurname(playerDto1.getName(), playerDto1.getSurname(), idGame).size() == 0)
-            throw new PlayerNotFoundException(this.getClass(), CODEEXCEPTION.PLAYERNOTFOUND.getCodeValue(), "The Player" + playerDto1.getName() + " " + playerDto1.getSurname() + " doesn't exist in the database");
+            throw new PlayerNotFoundException(this.getClass(), CODEEXCEPTION.PLAYERNOTFOUND.getCodeValue(), "The PlayerTennis" + playerDto1.getName() + " " + playerDto1.getSurname() + " doesn't exist in the database");
         else if (playerService.getPlayerModelByNameAndSurname(playerDto2.getName(), playerDto2.getSurname(), idGame).size() == 0)
-            throw new PlayerNotFoundException(this.getClass(), CODEEXCEPTION.PLAYERNOTFOUND.getCodeValue(), "The Player" + playerDto2.getName() + " " + playerDto2.getSurname() + " doesn't exist in the database");
+            throw new PlayerNotFoundException(this.getClass(), CODEEXCEPTION.PLAYERNOTFOUND.getCodeValue(), "The PlayerTennis" + playerDto2.getName() + " " + playerDto2.getSurname() + " doesn't exist in the database");
         else return true;
 
 
@@ -351,7 +351,7 @@ public class GameService implements IGameService {
     }
 
     /**
-     * Associate the two players to the Game
+     * Associate the two players to the GameTennis
      *
      * @param currentPlayersList
      * @param setModel
@@ -359,7 +359,7 @@ public class GameService implements IGameService {
      * @throws SaveUpdateDBException
      */
     private GameModel associatePlayersToGame(List<PlayerModel> currentPlayersList, SetModel setModel) throws SaveUpdateDBException {
-        GameModel gameModel = saveOrUpdateGame(new GameModel(0L, "Game", GAMESTATE.INPROGRESS, false, currentPlayersList, null), setModel);
+        GameModel gameModel = saveOrUpdateGame(new GameModel(0L, "GameTennis", GAMESTATE.INPROGRESS, false, currentPlayersList, null), setModel);
         currentPlayersList.forEach(playerItem -> {
             playerItem.setGame(gameModel);
             try {

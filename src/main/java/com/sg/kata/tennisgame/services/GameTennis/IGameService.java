@@ -1,10 +1,10 @@
-package com.sg.kata.tennisgame.services;
+package com.sg.kata.tennisgame.services.GameTennis;
 
 import com.sg.kata.tennisgame.dto.GameOutputDto;
 import com.sg.kata.tennisgame.dto.PlayerDto;
 import com.sg.kata.tennisgame.models.GameModel;
 import com.sg.kata.tennisgame.models.SetModel;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.exceptions.*;
 
 import java.util.List;
 

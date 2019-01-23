@@ -4,10 +4,9 @@ import com.sg.kata.tennisgame.dto.*;
 import com.sg.kata.tennisgame.enums.CODEEXCEPTION;
 import com.sg.kata.tennisgame.enums.GAMESTATE;
 import com.sg.kata.tennisgame.models.SetModel;
-import com.sg.kata.tennisgame.services.IGameService;
-import com.sg.kata.tennisgame.services.IPlayerService;
-import com.sg.kata.tennisgame.services.PlayerService;
-import com.sg.kata.tennisgame.utils.exceptions.*;
+import com.sg.kata.tennisgame.services.GameTennis.IGameService;
+import com.sg.kata.tennisgame.services.PlayerTennis.IPlayerService;
+import com.sg.kata.tennisgame.exceptions.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,11 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = {"/kata/tennis/game/"})
-@Api(value = "Tennis Game", tags = {"Tennis Game"}, description = "The controller that allows a tennis refree to manage a score of a game")
+@Api(value = "Tennis GameTennis", tags = {"Tennis GameTennis"}, description = "The controller that allows a tennis refree to manage a score of a game")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TennisGameController {
     Logger logger = LoggerFactory.getLogger(TennisGameController.class);

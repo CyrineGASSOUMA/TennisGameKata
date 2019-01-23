@@ -28,7 +28,7 @@ public class GameModel {
 
     @Column(name = "name_game")
     @NonNull
-    @ApiModelProperty(value = "The name of the game", example = "Game")
+    @ApiModelProperty(value = "The name of the game", example = "GameTennis")
     String nameGame;
 
     @Column(name = "state")
@@ -44,7 +44,7 @@ public class GameModel {
 
 
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
-    @ApiModelProperty(value = "The list of the player in the Game", example = "")
+    @ApiModelProperty(value = "The list of the player in the GameTennis", example = "")
     List<PlayerModel> playerModelList;
 
 
